@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <title>차종 판별 체크리스트</title>
+  <style>
+    body { font-family: Arial, sans-serif; background:#f9f9f9; padding:20px; }
+    h1 { color:#2c3e50; }
+    fieldset { margin-bottom:15px; padding:10px; border:1px solid #ccc; border-radius:8px; background:#fff; }
+    legend { font-weight:bold; color:#34495e; }
+    .result { margin-top:20px; padding:15px; border-radius:8px; background:#ecf0f1; font-size:1.1em; }
+    .highlight { font-weight:bold; color:#c0392b; }
+  </style>
+</head>
+<body>
+  <h1>🚨 차종 판별 체크리스트</h1>
+
+  <!-- 기본 조건 -->
+  <fieldset>
+    <legend>기본 조건 (공통)</legend>
+    <label><input type="radio" name="engine" value="over"> 배기량 125cc 초과 또는 전기동력 11kw 초과</label><br>
+    <label><input type="radio" name="engine" value="under"> 배기량 125cc 이하 또는 전기동력 11kw 이하</label>
+  </fieldset>
+
+  <!-- 세부 조건 -->
+  <fieldset>
+    <legend>속도 / 중량 조건</legend>
+    <label><input type="checkbox" id="speed"> 시속 25km 이상에서 전동기 작동하지 않음</label><br>
+    <label><input type="checkbox" id="weight"> 자체 중량 30kg 미만</label>
+  </fieldset>
+
+  <!-- 동력 방식 -->
+  <fieldset>
+    <legend>동력 방식</legend>
+    <label><input type="radio" name="drive" value="motor"> 전동기의 힘만으로 움직일 수 있음</label><br>
+    <label><input type="radio" name="drive" value="pedal"> 페달 + 전동기 병행 (전동기 단독 구동 불가)</label><br>
+    <label><input type="radio" name="drive" value="human"> 사람의 힘(페달)만으로 구동</label>
+  </fieldset>
+
+  <!-- 결과 -->
+  <button onclick="checkType()">차종 판별하기</button>
+  <div class="result" id="result">➡️ 결과가 여기에 표시됩니다.</div>
+
+  <script>
+    function checkType() {
+      const engine = document.querySelector('input[name="engine"]:checked');
+      const speed = document.getElementById('speed').checked;
+      const weight = document.getElementById('weight').checked;
+      const drive = document.querySelector('input[name="drive"]:checked');
+      const result = document.getElementById('result');
+
+      if (!engine) { result.innerHTML = "⚠️ 기본 조건을 선택하세요."; return; }
+      if (engine.value === "over") {
+        result.innerHTML = "<span class='highlight'>이륜자동차</span><br>▶ 처벌내용: 무면허·음주운전·운전자준수사항·통행방법 위반 적용<br>▶ 특이사항: 13세 미만 운행 불가";
+        return;
+      }
+
+      // engine under → 세부 조건 판별
+      if (speed && weight) {
+        if (!drive) { result.innerHTML = "⚠️ 동력 방식을 선택하세요."; return; }
+        if (drive.value === "motor") {
+          result.innerHTML = "<span class='highlight'>개인형이동장치</span><br>▶ 처벌내용: 무면허·음주운전·운전자준수사항·통행방법 위반<br>▶ 특이사항: 13세 미만 운행 불가";
+        } else if (drive.value === "pedal") {
+          result.innerHTML = "<span class='highlight'>전기자전거</span><br>▶ 처벌내용: 무면허·음주운전·운전자준수사항·통행방법 위반<br>▶ 특이사항: 13세 미만 운행 불가";
+        } else if (drive.value === "human") {
+          result.innerHTML = "<span class='highlight'>자전거</span><br>▶ 처벌내용: 무면허·음주운전·운전자준수사항·통행방법 위반<br>▶ 특이사항: 13세 미만 운행 불가";
+        }
+      } else {
+        result.innerHTML = "<span class='highlight'>원동기장치자전거</span><br>▶ 처벌내용: 무면허·음주운전·운전자준수사항·통행방법 위반<br>▶ 특이사항: 13세 미만 운행 불가";
+      }
+    }
+  </script>
+</body>
+</html>
