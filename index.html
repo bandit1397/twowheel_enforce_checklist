@@ -1,85 +1,178 @@
 <!DOCTYPE html>
 <html lang="ko">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>차종 판별 체크리스트</title>
-  <style>
-    body { font-family: Arial, sans-serif; background:#f9f9f9; padding:20px; }
-    h1 { color:#2c3e50; }
-    fieldset { margin-bottom:15px; padding:10px; border:1px solid #ccc; border-radius:8px; background:#fff; }
-    legend { font-weight:bold; color:#34495e; }
-    .result { margin-top:20px; padding:15px; border-radius:8px; background:#ecf0f1; font-size:1.1em; }
-    .highlight { font-weight:bold; color:#c0392b; }
-    button {
-      background:#3498db;
-      color:white;
-      padding:10px 20px;
-      border:none;
-      border-radius:8px;
-      font-size:1em;
-      cursor:pointer;
-    }
-    button:hover { background:#2980b9; }
-  </style>
+<meta charset="UTF-8">
+<title>차종 판별 체크리스트 + 처벌규정</title>
+<style>
+  body { font-family: Arial, sans-serif; margin: 20px; }
+  h2 { color: #2a4d91; }
+  .section { margin: 20px 0; padding: 15px; border: 1px solid #aaa; border-radius: 8px; }
+  .hidden { display: none; }
+  label { display: block; margin: 5px 0; }
+  .result { margin-top: 20px; padding: 15px; border: 2px solid #333; border-radius: 8px; background: #f9f9f9; }
+  ul { margin: 5px 0 0 20px; }
+</style>
 </head>
 <body>
-  <h1>🚨 차종 판별 체크리스트</h1>
 
-  <!-- 기본 조건 -->
-  <fieldset>
-    <legend>기본 조건 (공통)</legend>
-    <label><input type="radio" name="engine" value="over"> 배기량 125cc 초과 또는 전기동력 11kw 초과</label><br>
-    <label><input type="radio" name="engine" value="under"> 배기량 125cc 이하 또는 전기동력 11kw 이하</label>
-  </fieldset>
+<h2>🚦 차종 판별 체크리스트</h2>
 
-  <!-- 세부 조건 -->
-  <fieldset>
-    <legend>속도 / 중량 조건</legend>
-    <label><input type="checkbox" id="speed"> 시속 25km 이상에서 전동기 작동하지 않음</label><br>
-    <label><input type="checkbox" id="weight"> 자체 중량 30kg 미만</label>
-  </fieldset>
+<div class="section">
+  <h3>1. 동력 방식 선택</h3>
+  <label><input type="radio" name="drive" value="human"> 사람의 힘(페달)만</label>
+  <label><input type="radio" name="drive" value="motor"> 전동기의 힘만으로 구동 가능</label>
+  <label><input type="radio" name="drive" value="hybrid"> 페달 + 전동기 병행 (전동기 단독 불가)</label>
+</div>
 
-  <!-- 동력 방식 -->
-  <fieldset>
-    <legend>동력 방식</legend>
-    <label><input type="radio" name="drive" value="motor"> 전동기의 힘만으로 움직일 수 있음</label><br>
-    <label><input type="radio" name="drive" value="pedal"> 페달 + 전동기 병행 (전동기 단독 구동 불가)</label><br>
-    <label><input type="radio" name="drive" value="human"> 사람의 힘(페달)만으로 구동</label>
-  </fieldset>
+<div class="section hidden" id="bike-check">
+  <h3>2. 자전거 조건 확인</h3>
+  <label><input type="checkbox" id="twoWheels"> 바퀴 2개 이상</label>
+  <label><input type="checkbox" id="brake"> 제동장치(브레이크) 있음</label>
+</div>
 
-  <!-- 결과 -->
-  <button onclick="checkType()">차종 판별하기</button>
-  <div class="result" id="result">➡️ 결과가 여기에 표시됩니다.</div>
+<div class="section hidden" id="basic-check">
+  <h3>2. 기본 조건 확인</h3>
+  <label><input type="radio" name="engine" id="engineOk" value="ok"> 배기량 125cc 이하 / 전기동력 11kw 이하</label>
+  <label><input type="radio" name="engine" id="engineExceed" value="exceed"> 배기량 125cc 초과 또는 전기동력 11kw 초과 → 이륜자동차</label>
+</div>
 
-  <script>
-    function checkType() {
-      const engine = document.querySelector('input[name="engine"]:checked');
-      const speed = document.getElementById('speed').checked;
-      const weight = document.getElementById('weight').checked;
-      const drive = document.querySelector('input[name="drive"]:checked');
-      const result = document.getElementById('result');
+<div class="section hidden" id="speed-weight-check">
+  <h3>3. 속도 / 중량 조건 확인</h3>
+  <label><input type="checkbox" id="speedOk"> 시속 25km 이상에서 전동기 작동하지 않음</label>
+  <label><input type="checkbox" id="weightOk"> 자체 중량 30kg 미만</label>
+</div>
 
-      if (!engine) { result.innerHTML = "⚠️ 기본 조건을 선택하세요."; return; }
-      if (engine.value === "over") {
-        result.innerHTML = "<span class='highlight'>이륜자동차</span><br>▶ 처벌내용: 무면허·음주운전·운전자준수사항·통행방법 위반 적용<br>▶ 특이사항: 13세 미만 운행 불가";
-        return;
-      }
+<div class="result" id="result">✅ 판별 결과가 여기에 표시됩니다.</div>
 
-      // engine under → 세부 조건 판별
-      if (speed && weight) {
-        if (!drive) { result.innerHTML = "⚠️ 동력 방식을 선택하세요."; return; }
-        if (drive.value === "motor") {
-          result.innerHTML = "<span class='highlight'>개인형이동장치</span><br>▶ 처벌내용: 무면허·음주운전·운전자준수사항·통행방법 위반<br>▶ 특이사항: 13세 미만 운행 불가";
-        } else if (drive.value === "pedal") {
-          result.innerHTML = "<span class='highlight'>전기자전거</span><br>▶ 처벌내용: 무면허·음주운전·운전자준수사항·통행방법 위반<br>▶ 특이사항: 13세 미만 운행 불가";
-        } else if (drive.value === "human") {
-          result.innerHTML = "<span class='highlight'>자전거</span><br>▶ 처벌내용: 무면허·음주운전·운전자준수사항·통행방법 위반<br>▶ 특이사항: 13세 미만 운행 불가";
-        }
-      } else {
-        result.innerHTML = "<span class='highlight'>원동기장치자전거</span><br>▶ 처벌내용: 무면허·음주운전·운전자준수사항·통행방법 위반<br>▶ 특이사항: 13세 미만 운행 불가";
+<div class="section hidden" id="penalty-section">
+  <h3>🚨 차종별 위반 및 처벌</h3>
+  <ul id="penalty-list"></ul>
+</div>
+
+<script>
+// 차종별 처벌 규정 데이터
+const penalties = {
+  "이륜자동차": {
+    "무면허": "도로교통법 제50조: 30일 이하의 징역 또는 100만원 이하 벌금",
+    "음주운전": "도로교통법 제44조: 3년 이하 징역 또는 1천만원 이하 벌금",
+    "통행방법위반": "도로교통법 제20조: 범칙금 부과",
+    "운전자준수사항위반": "도로교통법 제65조: 범칙금 부과"
+  },
+  "원동기장치자전거": {
+    "무면허": "도로교통법 제50조: 20만원 이하 벌금",
+    "음주운전": "도로교통법 제44조: 500만원 이하 벌금",
+    "통행방법위반": "도로교통법 제20조: 범칙금 부과",
+    "운전자준수사항위반": "도로교통법 제65조: 범칙금 부과"
+  },
+  "개인형이동장치": {
+    "무면허": "개인형이동장치법 제10조: 20만원 이하 과태료",
+    "음주운전": "도로교통법 제44조 적용: 500만원 이하 벌금",
+    "통행방법위반": "도로교통법 제20조: 범칙금 부과",
+    "운전자준수사항위반": "도로교통법 제65조: 범칙금 부과"
+  },
+  "전기자전거": {
+    "무면허": "무면허 규정 없음 (모든 연령 가능)",
+    "음주운전": "도로교통법 제44조 적용: 범칙금/과태료",
+    "통행방법위반": "도로교통법 제20조 적용",
+    "운전자준수사항위반": "도로교통법 제65조 적용"
+  },
+  "자전거": {
+    "무면허": "무면허 규정 없음 (모든 연령 가능)",
+    "음주운전": "도로교통법 제44조 적용: 범칙금/과태료",
+    "통행방법위반": "도로교통법 제20조 적용",
+    "운전자준수사항위반": "도로교통법 제65조 적용"
+  }
+};
+
+const driveRadios = document.querySelectorAll('input[name="drive"]');
+const bikeCheck = document.getElementById('bike-check');
+const basicCheck = document.getElementById('basic-check');
+const speedWeightCheck = document.getElementById('speed-weight-check');
+const resultDiv = document.getElementById('result');
+const engineRadios = document.querySelectorAll('input[name="engine"]');
+
+function updateUI() {
+  const drive = document.querySelector('input[name="drive"]:checked')?.value;
+  bikeCheck.classList.add('hidden');
+  basicCheck.classList.add('hidden');
+  speedWeightCheck.classList.add('hidden');
+  document.getElementById('penalty-section').classList.add('hidden');
+  resultDiv.textContent = "✅ 판별 결과가 여기에 표시됩니다.";
+
+  if (drive === "human") {
+    bikeCheck.classList.remove('hidden');
+  } else if (drive === "motor" || drive === "hybrid") {
+    basicCheck.classList.remove('hidden');
+  }
+}
+
+function showPenalties(vehicleType) {
+  const penaltySection = document.getElementById('penalty-section');
+  const penaltyList = document.getElementById('penalty-list');
+  penaltyList.innerHTML = "";
+
+  if (!penalties[vehicleType]) {
+    penaltySection.classList.add('hidden');
+    return;
+  }
+
+  penaltySection.classList.remove('hidden');
+  for (const [violation, desc] of Object.entries(penalties[vehicleType])) {
+    const li = document.createElement('li');
+    li.textContent = `${violation}: ${desc}`;
+    penaltyList.appendChild(li);
+  }
+}
+
+function evaluate() {
+  const drive = document.querySelector('input[name="drive"]:checked')?.value;
+  let resultName = "";
+
+  if (!drive) return;
+
+  // 사람 힘만 → 자전거 / 운동기구
+  if (drive === "human") {
+    const twoWheels = document.getElementById('twoWheels').checked;
+    const brake = document.getElementById('brake').checked;
+    if (twoWheels && brake) {
+      resultName = "자전거";
+    } else {
+      resultName = "운동기구";
+    }
+  }
+
+  // 전동기 포함 → 기본조건 확인
+  if (drive === "motor" || drive === "hybrid") {
+    const engineExceed = document.getElementById('engineExceed').checked;
+    const engineOk = document.getElementById('engineOk').checked;
+
+    if (engineExceed) {
+      // 배기량/출력 초과 → 이륜자동차
+      speedWeightCheck.classList.add('hidden');
+      resultName = "이륜자동차";
+    } else if (engineOk) {
+      // 속도/중량 확인
+      speedWeightCheck.classList.remove('hidden');
+      const speedOk = document.getElementById('speedOk').checked;
+      const weightOk = document.getElementById('weightOk').checked;
+
+      if (drive === "motor") {
+        resultName = (speedOk && weightOk) ? "개인형이동장치" : "원동기장치자전거";
+      } else if (drive === "hybrid") {
+        resultName = (speedOk && weightOk) ? "전기자전거" : "원동기장치자전거";
       }
     }
-  </script>
+  }
+
+  resultDiv.textContent = "✅ 판별 결과: " + resultName;
+  showPenalties(resultName);
+}
+
+// 이벤트 바인딩
+driveRadios.forEach(r => r.addEventListener('change', () => { updateUI(); evaluate(); }));
+engineRadios.forEach(r => r.addEventListener('change', evaluate));
+document.querySelectorAll('#bike-check input[type="checkbox"], #speed-weight-check input[type="checkbox"]').forEach(cb => cb.addEventListener('change', evaluate));
+</script>
+
 </body>
 </html>
