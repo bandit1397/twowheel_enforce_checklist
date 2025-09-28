@@ -26,9 +26,9 @@
 
 <div class="section hidden" id="bike-check">
   <h3>2. 자전거 조건 확인</h3>
-  <label><input type="checkbox" id="twoWheels"> 구동장치</label>
-  <label><input type="checkbox" id="twoWheels"> 조향장치</label>
-  <label><input type="checkbox" id="twoWheels"> 제동장치</label>
+  <label><input type="checkbox" id="powertrain"> 구동장치</label>
+  <label><input type="checkbox" id="steering system"> 조향장치</label>
+  <label><input type="checkbox" id="brakes"> 제동장치</label>
   <label><input type="checkbox" id="twoWheels"> 바퀴 2개 이상인 차</label>
 </div>
 
@@ -136,7 +136,7 @@ function evaluate() {
   if (drive === "human") {
     const twoWheels = document.getElementById('twoWheels').checked;
     const brake = document.getElementById('brake').checked;
-    if (twoWheels && brake) {
+    if (powertrain && steering system && brakes && twowheels) {
       resultName = "자전거";
     } else {
       resultName = "운동기구";
