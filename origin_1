@@ -2,15 +2,33 @@
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
 <title>차종 판별 체크리스트 + 처벌규정</title>
 <style>
-  body { font-family: Arial, sans-serif; margin: 20px; }
-  h2 { color: #2a4d91; }
-  .section { margin: 20px 0; padding: 15px; border: 1px solid #aaa; border-radius: 8px; }
+  body { font-family: Arial, sans-serif; margin: 10px; padding: 0; background:#f9f9f9; }
+  h2 { color: #2a4d91; font-size: 22px; }
+  h3 { font-size: 18px; margin-bottom: 8px; }
+  .section { margin: 15px 0; padding: 12px; border: 1px solid #aaa; border-radius: 8px; background:#fff; }
   .hidden { display: none; }
-  label { display: block; margin: 5px 0; }
-  .result { margin-top: 20px; padding: 15px; border: 2px solid #333; border-radius: 8px; background: #f9f9f9; }
-  ul { margin: 5px 0 0 20px; }
+  label { display: block; margin: 5px 0; font-size: 14px; }
+  input[type="radio"], input[type="checkbox"] { margin-right: 6px; }
+  .result { margin-top: 15px; padding: 12px; border: 2px solid #333; border-radius: 8px; background: #fff; font-size: 14px; }
+  ul { margin: 5px 0 0 20px; padding-left: 0; list-style-type: none; }
+  li.depth0 { font-weight: bold; margin-top: 6px; }
+  li.depth1 { margin-left: 20px; color:#2a4d91; }
+  li.depth2 { margin-left: 40px; color:#555; }
+
+  /* 모바일 대응 */
+  @media (max-width: 600px) {
+    body { font-size: 14px; }
+    h2 { font-size: 20px; }
+    h3 { font-size: 16px; }
+    label { font-size: 14px; }
+    .result { font-size: 14px; padding: 10px; }
+    ul li.depth1 { margin-left: 15px; }
+    ul li.depth2 { margin-left: 30px; }
+    .section { padding: 10px; }
+  }
 </style>
 </head>
 <body>
@@ -52,62 +70,81 @@
 </div>
 
 <script>
-// 차종별 처벌 규정 데이터
+// penalties 정의
 const penalties = {
-  "이륜자동차": {
-    "무면허": "도로교통법 제50조: 30일 이하의 징역 또는 100만원 이하 벌금",
-    "음주운전": "도로교통법 제44조: 3년 이하 징역 또는 1천만원 이하 벌금",
-    "통행방법위반": "도로교통법 제20조: 범칙금 부과",
-    "운전자준수사항위반": "도로교통법 제65조: 범칙금 부과"
-  },
-  "원동기장치자전거": {
-    "무면허": "도로교통법 제50조: 20만원 이하 벌금",
-    "음주운전": "도로교통법 제44조: 500만원 이하 벌금",
-    "통행방법위반": "도로교통법 제20조: 범칙금 부과",
-    "운전자준수사항위반": "도로교통법 제65조: 범칙금 부과"
-  },
-  "개인형이동장치": {
-    "무면허": "개인형이동장치법 제10조: 20만원 이하 과태료",
-    "음주운전": "도로교통법 제44조 적용: 500만원 이하 벌금",
-    "통행방법위반": "도로교통법 제20조: 범칙금 부과",
-    "운전자준수사항위반": "도로교통법 제65조: 범칙금 부과"
-  },
-  "전기자전거": {
-    "무면허": "무면허 규정 없음 (모든 연령 가능)",
-    "음주운전": "도로교통법 제44조 적용: 범칙금/과태료",
-    "통행방법위반": "도로교통법 제20조 적용",
-    "운전자준수사항위반": "도로교통법 제65조 적용"
-  },
-  "자전거": {
-    "무면허": "무면허 규정 없음 (모든 연령 가능)",
-    "음주운전": "도로교통법 제44조 적용: 범칙금/과태료",
-    "통행방법위반": "도로교통법 제20조 적용",
-    "운전자준수사항위반": "도로교통법 제65조 적용"
-  }
+  "이륜자동차": [
+    { text: "□ 무면허위반", depth: 0 },
+    { text: "► 도로교통법 제50조", depth: 1 },
+    { text: "→ 30일 이하의 징역 또는 100만원 이하 벌금", depth: 2 },
+    { text: "□ 음주운전", depth: 0 },
+    { text: "► 도로교통법 제44조", depth: 1 },
+    { text: "→ 3년 이하 징역 또는 1천만원 이하 벌금", depth: 2 },
+    { text: "□ 통행방법위반", depth: 0 },
+    { text: "► 도로교통법 제20조", depth: 1 },
+    { text: "→ 범칙금 부과", depth: 2 },
+    { text: "□ 운전자준수사항위반", depth: 0 },
+    { text: "► 도로교통법 제65조", depth: 1 },
+    { text: "→ 범칙금 부과", depth: 2 }
+  ],
+  "원동기장치자전거": [
+    { text: "□ 무면허위반", depth: 0 },
+    { text: "► 도로교통법 제50조", depth: 1 },
+    { text: "→ 20만원 이하 벌금", depth: 2 },
+    { text: "□ 음주운전", depth: 0 },
+    { text: "► 도로교통법 제44조", depth: 1 },
+    { text: "→ 500만원 이하 벌금", depth: 2 },
+    { text: "□ 통행방법위반", depth: 0 },
+    { text: "► 도로교통법 제20조", depth: 1 },
+    { text: "→ 범칙금 부과", depth: 2 },
+    { text: "□ 운전자준수사항위반", depth: 0 },
+    { text: "► 도로교통법 제65조", depth: 1 },
+    { text: "→ 범칙금 부과", depth: 2 }
+  ],
+  "개인형이동장치": [
+    { text: "□ 무면허위반", depth: 0 },
+    { text: "► 개인형이동장치법 제10조", depth: 1 },
+    { text: "→ 20만원 이하 과태료", depth: 2 },
+    { text: "□ 음주운전", depth: 0 },
+    { text: "► 도로교통법 제44조", depth: 1 },
+    { text: "→ 500만원 이하 벌금", depth: 2 },
+    { text: "□ 통행방법위반", depth: 0 },
+    { text: "► 도로교통법 제20조", depth: 1 },
+    { text: "→ 범칙금 부과", depth: 2 },
+    { text: "□ 운전자준수사항위반", depth: 0 },
+    { text: "► 도로교통법 제65조", depth: 1 },
+    { text: "→ 범칙금 부과", depth: 2 }
+  ],
+  "전기자전거": [
+    { text: "□ 무면허위반", depth: 0 },
+    { text: "► 무면허 규정 없음", depth: 1 },
+    { text: "→ 모든 연령 가능", depth: 2 },
+    { text: "□ 음주운전", depth: 0 },
+    { text: "► 도로교통법 제44조", depth: 1 },
+    { text: "→ 범칙금/과태료", depth: 2 },
+    { text: "□ 통행방법위반", depth: 0 },
+    { text: "► 도로교통법 제20조", depth: 1 },
+    { text: "→ 적용", depth: 2 },
+    { text: "□ 운전자준수사항위반", depth: 0 },
+    { text: "► 도로교통법 제65조", depth: 1 },
+    { text: "→ 적용", depth: 2 }
+  ],
+  "자전거": [
+    { text: "□ 무면허위반", depth: 0 },
+    { text: "► 무면허 규정 없음", depth: 1 },
+    { text: "→ 모든 연령 가능", depth: 2 },
+    { text: "□ 음주운전", depth: 0 },
+    { text: "► 도로교통법 제44조", depth: 1 },
+    { text: "→ 범칙금/과태료", depth: 2 },
+    { text: "□ 통행방법위반", depth: 0 },
+    { text: "► 도로교통법 제20조", depth: 1 },
+    { text: "→ 적용", depth: 2 },
+    { text: "□ 운전자준수사항위반", depth: 0 },
+    { text: "► 도로교통법 제65조", depth: 1 },
+    { text: "→ 적용", depth: 2 }
+  ]
 };
 
-const driveRadios = document.querySelectorAll('input[name="drive"]');
-const bikeCheck = document.getElementById('bike-check');
-const basicCheck = document.getElementById('basic-check');
-const speedWeightCheck = document.getElementById('speed-weight-check');
-const resultDiv = document.getElementById('result');
-const engineRadios = document.querySelectorAll('input[name="engine"]');
-
-function updateUI() {
-  const drive = document.querySelector('input[name="drive"]:checked')?.value;
-  bikeCheck.classList.add('hidden');
-  basicCheck.classList.add('hidden');
-  speedWeightCheck.classList.add('hidden');
-  document.getElementById('penalty-section').classList.add('hidden');
-  resultDiv.textContent = "✅ 판별 결과가 여기에 표시됩니다.";
-
-  if (drive === "human") {
-    bikeCheck.classList.remove('hidden');
-  } else if (drive === "motor" || drive === "hybrid") {
-    basicCheck.classList.remove('hidden');
-  }
-}
-
+// 위반/처벌 표시
 function showPenalties(vehicleType) {
   const penaltySection = document.getElementById('penalty-section');
   const penaltyList = document.getElementById('penalty-list');
@@ -119,52 +156,60 @@ function showPenalties(vehicleType) {
   }
 
   penaltySection.classList.remove('hidden');
-  for (const [violation, desc] of Object.entries(penalties[vehicleType])) {
+
+  penalties[vehicleType].forEach(item => {
     const li = document.createElement('li');
-    li.textContent = `${violation}: ${desc}`;
+    li.textContent = item.text;
+    li.className = "depth" + item.depth;
     penaltyList.appendChild(li);
-  }
+  });
 }
 
+// UI 업데이트
+function updateUI() {
+  const drive = document.querySelector('input[name="drive"]:checked')?.value;
+  bikeCheck.classList.add('hidden');
+  basicCheck.classList.add('hidden');
+  speedWeightCheck.classList.add('hidden');
+  document.getElementById('penalty-section').classList.add('hidden');
+  resultDiv.textContent = "✅ 판별 결과가 여기에 표시됩니다.";
+
+  document.querySelectorAll('#bike-check input, #basic-check input, #speed-weight-check input').forEach(el => {
+    if(el.type === "checkbox") el.checked = false;
+    else if(el.type === "radio") el.checked = false;
+  });
+
+  if (drive === "human") bikeCheck.classList.remove('hidden');
+  else if (drive === "motor" || drive === "hybrid") basicCheck.classList.remove('hidden');
+}
+
+// 판별 로직
 function evaluate() {
   const drive = document.querySelector('input[name="drive"]:checked')?.value;
-  let resultName = "";
-
   if (!drive) return;
 
-  // 사람 힘만 → 자전거 / 운동기구
+  let resultName = "";
+
   if (drive === "human") {
     const powertrain = document.getElementById('powertrain').checked;
     const steeringsystem = document.getElementById('steeringsystem').checked;
     const brake = document.getElementById('brake').checked;
     const twowheels = document.getElementById('twowheels').checked;
-    if (powertrain && steeringsystem && brake && twowheels) {
-      resultName = "자전거";
-    } else {
-      resultName = "운동기구";
-    }
+    resultName = (powertrain && steeringsystem && brake && twowheels) ? "자전거" : "운동기구";
   }
 
-  // 전동기 포함 → 기본조건 확인
   if (drive === "motor" || drive === "hybrid") {
     const engineExceed = document.getElementById('engineExceed').checked;
     const engineOk = document.getElementById('engineOk').checked;
 
-    if (engineExceed) {
-      // 배기량/출력 초과 → 이륜자동차
-      speedWeightCheck.classList.add('hidden');
-      resultName = "이륜자동차";
-    } else if (engineOk) {
-      // 속도/중량 확인
+    if (engineExceed) resultName = "이륜자동차";
+    else if (engineOk) {
       speedWeightCheck.classList.remove('hidden');
       const speedOk = document.getElementById('speedOk').checked;
       const weightOk = document.getElementById('weightOk').checked;
 
-      if (drive === "motor") {
-        resultName = (speedOk && weightOk) ? "개인형이동장치" : "원동기장치자전거";
-      } else if (drive === "hybrid") {
-        resultName = (speedOk && weightOk) ? "전기자전거" : "원동기장치자전거";
-      }
+      if (drive === "motor") resultName = (speedOk && weightOk) ? "개인형이동장치" : "원동기장치자전거";
+      else if (drive === "hybrid") resultName = (speedOk && weightOk) ? "전기자전거" : "원동기장치자전거";
     }
   }
 
@@ -173,6 +218,13 @@ function evaluate() {
 }
 
 // 이벤트 바인딩
+const driveRadios = document.querySelectorAll('input[name="drive"]');
+const engineRadios = document.querySelectorAll('input[name="engine"]');
+const bikeCheck = document.getElementById('bike-check');
+const basicCheck = document.getElementById('basic-check');
+const speedWeightCheck = document.getElementById('speed-weight-check');
+const resultDiv = document.getElementById('result');
+
 driveRadios.forEach(r => r.addEventListener('change', () => { updateUI(); evaluate(); }));
 engineRadios.forEach(r => r.addEventListener('change', evaluate));
 document.querySelectorAll('#bike-check input[type="checkbox"], #speed-weight-check input[type="checkbox"]').forEach(cb => cb.addEventListener('change', evaluate));
