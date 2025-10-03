@@ -47,6 +47,7 @@
   <label><input type="checkbox" id="steeringsystem"> 조향장치</label>
   <label><input type="checkbox" id="brake"> 제동장치</label>
   <label><input type="checkbox" id="twowheels"> 바퀴 2개 이상인 차</label>
+  <label><input type="checkbox" id="ministerialordinance"> 행정안전부령으로 정하는 크기와 구조</label>
 </div>
 
 <div class="section hidden" id="basic-check">
@@ -187,7 +188,8 @@ function evaluate() {
     const steeringsystem = document.getElementById('steeringsystem').checked;
     const brake = document.getElementById('brake').checked;
     const twowheels = document.getElementById('twowheels').checked;
-    resultName = (powertrain && steeringsystem && brake && twowheels) ? "자전거" : "운동기구";
+    const ministerialordinance = document.getElementById('ministerialordinance').checked;
+    resultName = (powertrain && steeringsystem && brake && twowheels && ministerialordinance) ? "자전거" : "운동기구";
   }
 
   if (drive === "motor" || drive === "hybrid") {
