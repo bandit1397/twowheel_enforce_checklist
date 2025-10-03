@@ -60,6 +60,7 @@
   <h3>3. 속도 / 중량 조건 확인</h3>
   <label><input type="checkbox" id="speedOk"> 시속 25km 이상에서 전동기 작동하지 않음</label>
   <label><input type="checkbox" id="weightOk"> 자체 중량 30kg 미만</label>
+  <label><input type="checkbox" id="ministerialordinance1"> 행정안전부령으로 정하는 것</label>
 </div>
 
 <div class="result" id="result">✅ 판별 결과가 여기에 표시됩니다.</div>
@@ -114,7 +115,7 @@ const penalties = {
     { text: "► 도로교통법 제65조", depth: 1 },
     { text: "→ 범칙금 부과", depth: 2 }
   ],
-  "전기자전거": [
+  "전기자전거(도로교통법상 자전거)": [
     { text: "□ 무면허위반", depth: 0 },
     { text: "► 무면허 규정 없음", depth: 1 },
     { text: "→ 모든 연령 가능", depth: 2 },
@@ -149,7 +150,10 @@ function showPenalties(vehicleType) {
   const penaltySection = document.getElementById('penalty-section');
   const penaltyList = document.getElementById('penalty-list');
   penaltyList.innerHTML = "";
-  if (!penalties[vehicleType]) { penaltySection.classList.add('hidden'); return; }
+  if (!penalties[vehicleType]) { 
+    penaltySection.classList.add('hidden'); 
+    return; 
+  }
   penaltySection.classList.remove('hidden');
   penalties[vehicleType].forEach(item => {
     const li = document.createElement('li');
@@ -195,13 +199,25 @@ function evaluate() {
   if (drive === "motor" || drive === "hybrid") {
     const engineExceed = document.getElementById('engineExceed').checked;
     const engineOk = document.getElementById('engineOk').checked;
-    if (engineExceed) resultName = "이륜자동차";
-    else if (engineOk) {
+
+    // ✅ motor + engineExceed → 바로 이륜자동차
+    if (drive === "motor" && engineExceed) {
+      resultName = "이륜자동차";
+      speedWeightCheck.classList.add('hidden'); // speed/weight 체크 안 보이게
+    } else if (engineExceed) {
+      resultName = "이륜자동차";
+    } else if (engineOk) {
       speedWeightCheck.classList.remove('hidden');
       const speedOk = document.getElementById('speedOk').checked;
       const weightOk = document.getElementById('weightOk').checked;
-      if (drive === "motor") resultName = (speedOk && weightOk) ? "개인형이동장치" : "원동기장치자전거";
-      else if (drive === "hybrid") resultName = (speedOk && weightOk) ? "전기자전거" : "원동기장치자전거";
+      const ministerialordinance1 = document.getElementById('ministerialordinance1').checked;
+
+      if (drive === "motor") {
+        resultName = (speedOk && weightOk && ministerialordinance1) ? "개인형이동장치" : "원동기장치자전거";
+      } 
+      else if (drive === "hybrid") {
+        resultName = (speedOk && weightOk && ministerialordinance1) ? "전기자전거(도로교통법상 자전거)" : "원동기장치자전거";
+      }
     }
   }
 
