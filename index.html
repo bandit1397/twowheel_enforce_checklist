@@ -5,29 +5,28 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>차종 판별 체크리스트 + 처벌규정</title>
 <style>
-  body { font-family: Arial, sans-serif; margin: 10px; padding: 0; background:#f9f9f9; }
-  h2 { color: #2a4d91; font-size: 22px; }
-  h3 { font-size: 18px; margin-bottom: 8px; }
-  .section { margin: 15px 0; padding: 12px; border: 1px solid #aaa; border-radius: 8px; background:#fff; }
+  body { font-family: Arial, sans-serif; margin: 10px; padding: 0; background:#f9f9f9; font-size: 16px; }
+  h2 { color: #2a4d91; font-size: 26px; }
+  h3 { font-size: 20px; margin-bottom: 10px; }
+  .section { margin: 15px 0; padding: 14px; border: 1px solid #aaa; border-radius: 8px; background:#fff; }
   .hidden { display: none; }
-  label { display: block; margin: 5px 0; font-size: 14px; }
-  input[type="radio"], input[type="checkbox"] { margin-right: 6px; }
-  .result { margin-top: 15px; padding: 12px; border: 2px solid #333; border-radius: 8px; background: #fff; font-size: 14px; }
+  label { display: block; margin: 8px 0; font-size: 16px; }
+  input[type="radio"], input[type="checkbox"] { margin-right: 8px; }
+  .result { margin-top: 15px; padding: 14px; border: 2px solid #333; border-radius: 8px; background: #fff; font-size: 16px; }
   ul { margin: 5px 0 0 20px; padding-left: 0; list-style-type: none; }
-  li.depth0 { font-weight: bold; margin-top: 6px; }
+  li.depth0 { font-weight: bold; margin-top: 8px; }
   li.depth1 { margin-left: 20px; color:#2a4d91; }
   li.depth2 { margin-left: 40px; color:#555; }
 
-  /* 모바일 대응 */
   @media (max-width: 600px) {
-    body { font-size: 14px; }
-    h2 { font-size: 20px; }
-    h3 { font-size: 16px; }
-    label { font-size: 14px; }
-    .result { font-size: 14px; padding: 10px; }
+    body { font-size: 18px; }
+    h2 { font-size: 24px; }
+    h3 { font-size: 20px; }
+    label { font-size: 18px; }
+    .result { font-size: 18px; padding: 12px; }
     ul li.depth1 { margin-left: 15px; }
     ul li.depth2 { margin-left: 30px; }
-    .section { padding: 10px; }
+    .section { padding: 12px; }
   }
 </style>
 </head>
@@ -149,14 +148,8 @@ function showPenalties(vehicleType) {
   const penaltySection = document.getElementById('penalty-section');
   const penaltyList = document.getElementById('penalty-list');
   penaltyList.innerHTML = "";
-
-  if (!penalties[vehicleType]) {
-    penaltySection.classList.add('hidden');
-    return;
-  }
-
+  if (!penalties[vehicleType]) { penaltySection.classList.add('hidden'); return; }
   penaltySection.classList.remove('hidden');
-
   penalties[vehicleType].forEach(item => {
     const li = document.createElement('li');
     li.textContent = item.text;
@@ -187,7 +180,6 @@ function updateUI() {
 function evaluate() {
   const drive = document.querySelector('input[name="drive"]:checked')?.value;
   if (!drive) return;
-
   let resultName = "";
 
   if (drive === "human") {
@@ -201,13 +193,11 @@ function evaluate() {
   if (drive === "motor" || drive === "hybrid") {
     const engineExceed = document.getElementById('engineExceed').checked;
     const engineOk = document.getElementById('engineOk').checked;
-
     if (engineExceed) resultName = "이륜자동차";
     else if (engineOk) {
       speedWeightCheck.classList.remove('hidden');
       const speedOk = document.getElementById('speedOk').checked;
       const weightOk = document.getElementById('weightOk').checked;
-
       if (drive === "motor") resultName = (speedOk && weightOk) ? "개인형이동장치" : "원동기장치자전거";
       else if (drive === "hybrid") resultName = (speedOk && weightOk) ? "전기자전거" : "원동기장치자전거";
     }
