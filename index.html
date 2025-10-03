@@ -60,7 +60,7 @@
   <h3>3. 속도 / 중량 조건 확인</h3>
   <label><input type="checkbox" id="speedOk"> 시속 25km 이상에서 전동기 작동하지 않음</label>
   <label><input type="checkbox" id="weightOk"> 자체 중량 30kg 미만</label>
-  <label><input type="checkbox" id="ministerialordinance"> 행정안전부령으로 정하는 것</label>
+  <label><input type="checkbox" id="ministerialordinance1"> 행정안전부령으로 정하는 것</label>
 </div>
 
 <div class="result" id="result">✅ 판별 결과가 여기에 표시됩니다.</div>
@@ -201,8 +201,8 @@ function evaluate() {
       speedWeightCheck.classList.remove('hidden');
       const speedOk = document.getElementById('speedOk').checked;
       const weightOk = document.getElementById('weightOk').checked;
-      const ministerialordinance = document.getElementById('ministerialordinance').checked;
-      if (drive === "motor") resultName = (speedOk && weightOk && ministerialordinance) ? "개인형이동장치" : "원동기장치자전거";
+      const ministerialordinance1 = document.getElementById('ministerialordinance1').checked;
+      if (drive === "motor") resultName = (speedOk && weightOk && ministerialordinance1) ? "개인형이동장치" : "원동기장치자전거";
       else if (drive === "hybrid") resultName = (speedOk && weightOk) ? "전기자전거(도로교통법상 자전거)" : "원동기장치자전거";
     }
   }
