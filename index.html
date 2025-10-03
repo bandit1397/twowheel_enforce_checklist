@@ -201,7 +201,7 @@ function evaluate() {
       const speedOk = document.getElementById('speedOk').checked;
       const weightOk = document.getElementById('weightOk').checked;
       if (drive === "motor") resultName = (speedOk && weightOk) ? "개인형이동장치" : "원동기장치자전거";
-      else if (drive === "hybrid") resultName = (speedOk && weightOk) ? "전기자전거" : "원동기장치자전거";
+      else if (drive === "hybrid") resultName = (speedOk && weightOk) ? "전기자전거(도로교통법상 자전거)" : "원동기장치자전거";
     }
   }
 
