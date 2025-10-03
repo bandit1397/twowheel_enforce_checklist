@@ -113,18 +113,36 @@ function showPenalties(vehicleType) {
   const penaltyList = document.getElementById('penalty-list');
   penaltyList.innerHTML = "";
 
-  if (!penalties[vehicleType]) {
+  const data = penalties[vehicleType];
+  if (!data) {
     penaltySection.classList.add('hidden');
     return;
   }
 
   penaltySection.classList.remove('hidden');
-  for (const [violation, desc] of Object.entries(penalties[vehicleType])) {
-    const li = document.createElement('li');
-    li.textContent = `${violation}: ${desc}`;
-    penaltyList.appendChild(li);
+
+  for (const [violation, desc] of Object.entries(data)) {
+    if (Array.isArray(desc)) {
+      // 아동학대처럼 배열인 경우
+      const li = document.createElement('li');
+      li.textContent = violation; // "현장출동"
+      penaltyList.appendChild(li);
+
+      desc.forEach(item => {
+        const subLi = document.createElement('li');
+        subLi.textContent = item.text;
+        subLi.style.marginLeft = `${20 * item.depth}px`; // depth만큼 들여쓰기
+        penaltyList.appendChild(subLi);
+      });
+    } else {
+      // 기존처럼 문자열인 경우
+      const li = document.createElement('li');
+      li.textContent = `${violation}: ${desc}`;
+      penaltyList.appendChild(li);
+    }
   }
 }
+
 
 function evaluate() {
   const drive = document.querySelector('input[name="drive"]:checked')?.value;
