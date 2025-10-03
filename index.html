@@ -55,100 +55,117 @@
 </div>
 
 <script>
-// 차종별 처벌 규정 데이터 (depth 구조 적용)
+// ✅ depth 구조로 penalties 정의
 const penalties = {
-  "이륜자동차": {
-    "□ 무면허위반": [
-      "► 도로교통법 제50조",
-      "→ 30일 이하의 징역 또는 100만원 이하 벌금"
-    ],
-    "□ 음주운전": [
-      "► 도로교통법 제44조",
-      "→ 3년 이하 징역 또는 1천만원 이하 벌금"
-    ],
-    "□ 통행방법위반": [
-      "► 도로교통법 제20조",
-      "→ 범칙금 부과"
-    ],
-    "□ 운전자준수사항위반": [
-      "► 도로교통법 제65조",
-      "→ 범칙금 부과"
-    ]
-  },
-  "원동기장치자전거": {
-    "무면허위반": [
-      "도로교통법 제50조",
-      "20만원 이하 벌금"
-    ],
-    "음주운전": [
-      "도로교통법 제44조",
-      "500만원 이하 벌금"
-    ],
-    "통행방법위반": [
-      "도로교통법 제20조",
-      "범칙금 부과"
-    ],
-    "운전자준수사항위반": [
-      "도로교통법 제65조",
-      "범칙금 부과"
-    ]
-  },
-  "개인형이동장치": {
-    "무면허위반": [
-      "개인형이동장치법 제10조",
-      "20만원 이하 과태료"
-    ],
-    "음주운전": [
-      "도로교통법 제44조",
-      "500만원 이하 벌금"
-    ],
-    "통행방법위반": [
-      "도로교통법 제20조",
-      "범칙금 부과"
-    ],
-    "운전자준수사항위반": [
-      "도로교통법 제65조",
-      "범칙금 부과"
-    ]
-  },
-  "전기자전거": {
-    "무면허위반": [
-      "무면허 규정 없음",
-      "모든 연령 가능"
-    ],
-    "음주운전": [
-      "도로교통법 제44조",
-      "범칙금/과태료"
-    ],
-    "통행방법위반": [
-      "도로교통법 제20조",
-      "적용"
-    ],
-    "운전자준수사항위반": [
-      "도로교통법 제65조",
-      "적용"
-    ]
-  },
-  "자전거": {
-    "무면허위반": [
-      "무면허 규정 없음",
-      "모든 연령 가능"
-    ],
-    "음주운전": [
-      "도로교통법 제44조",
-      "범칙금/과태료"
-    ],
-    "통행방법위반": [
-      "도로교통법 제20조",
-      "적용"
-    ],
-    "운전자준수사항위반": [
-      "도로교통법 제65조",
-      "적용"
-    ]
-  }
+  "이륜자동차": [
+    { text: "□ 무면허위반", depth: 0 },
+    { text: "► 도로교통법 제50조", depth: 1 },
+    { text: "→ 30일 이하의 징역 또는 100만원 이하 벌금", depth: 2 },
+
+    { text: "□ 음주운전", depth: 0 },
+    { text: "► 도로교통법 제44조", depth: 1 },
+    { text: "→ 3년 이하 징역 또는 1천만원 이하 벌금", depth: 2 },
+
+    { text: "□ 통행방법위반", depth: 0 },
+    { text: "► 도로교통법 제20조", depth: 1 },
+    { text: "→ 범칙금 부과", depth: 2 },
+
+    { text: "□ 운전자준수사항위반", depth: 0 },
+    { text: "► 도로교통법 제65조", depth: 1 },
+    { text: "→ 범칙금 부과", depth: 2 }
+  ],
+  "원동기장치자전거": [
+    { text: "□ 무면허위반", depth: 0 },
+    { text: "► 도로교통법 제50조", depth: 1 },
+    { text: "→ 20만원 이하 벌금", depth: 2 },
+
+    { text: "□ 음주운전", depth: 0 },
+    { text: "► 도로교통법 제44조", depth: 1 },
+    { text: "→ 500만원 이하 벌금", depth: 2 },
+
+    { text: "□ 통행방법위반", depth: 0 },
+    { text: "► 도로교통법 제20조", depth: 1 },
+    { text: "→ 범칙금 부과", depth: 2 },
+
+    { text: "□ 운전자준수사항위반", depth: 0 },
+    { text: "► 도로교통법 제65조", depth: 1 },
+    { text: "→ 범칙금 부과", depth: 2 }
+  ],
+  "개인형이동장치": [
+    { text: "□ 무면허위반", depth: 0 },
+    { text: "► 개인형이동장치법 제10조", depth: 1 },
+    { text: "→ 20만원 이하 과태료", depth: 2 },
+
+    { text: "□ 음주운전", depth: 0 },
+    { text: "► 도로교통법 제44조", depth: 1 },
+    { text: "→ 500만원 이하 벌금", depth: 2 },
+
+    { text: "□ 통행방법위반", depth: 0 },
+    { text: "► 도로교통법 제20조", depth: 1 },
+    { text: "→ 범칙금 부과", depth: 2 },
+
+    { text: "□ 운전자준수사항위반", depth: 0 },
+    { text: "► 도로교통법 제65조", depth: 1 },
+    { text: "→ 범칙금 부과", depth: 2 }
+  ],
+  "전기자전거": [
+    { text: "□ 무면허위반", depth: 0 },
+    { text: "► 무면허 규정 없음", depth: 1 },
+    { text: "→ 모든 연령 가능", depth: 2 },
+
+    { text: "□ 음주운전", depth: 0 },
+    { text: "► 도로교통법 제44조", depth: 1 },
+    { text: "→ 범칙금/과태료", depth: 2 },
+
+    { text: "□ 통행방법위반", depth: 0 },
+    { text: "► 도로교통법 제20조", depth: 1 },
+    { text: "→ 적용", depth: 2 },
+
+    { text: "□ 운전자준수사항위반", depth: 0 },
+    { text: "► 도로교통법 제65조", depth: 1 },
+    { text: "→ 적용", depth: 2 }
+  ],
+  "자전거": [
+    { text: "□ 무면허위반", depth: 0 },
+    { text: "► 무면허 규정 없음", depth: 1 },
+    { text: "→ 모든 연령 가능", depth: 2 },
+
+    { text: "□ 음주운전", depth: 0 },
+    { text: "► 도로교통법 제44조", depth: 1 },
+    { text: "→ 범칙금/과태료", depth: 2 },
+
+    { text: "□ 통행방법위반", depth: 0 },
+    { text: "► 도로교통법 제20조", depth: 1 },
+    { text: "→ 적용", depth: 2 },
+
+    { text: "□ 운전자준수사항위반", depth: 0 },
+    { text: "► 도로교통법 제65조", depth: 1 },
+    { text: "→ 적용", depth: 2 }
+  ]
 };
 
+// ✅ 위반/처벌 표시 함수
+function showPenalties(vehicleType) {
+  const penaltySection = document.getElementById('penalty-section');
+  const penaltyList = document.getElementById('penalty-list');
+  penaltyList.innerHTML = "";
+
+  if (!penalties[vehicleType]) {
+    penaltySection.classList.add('hidden');
+    return;
+  }
+
+  penaltySection.classList.remove('hidden');
+
+  penalties[vehicleType].forEach(item => {
+    const li = document.createElement('li');
+    li.textContent = item.text;
+    li.className = "depth" + item.depth;
+    penaltyList.appendChild(li);
+  });
+}
+
+// ✅ 차종 판별 로직 (기존 그대로 유지)
 const driveRadios = document.querySelectorAll('input[name="drive"]');
 const bikeCheck = document.getElementById('bike-check');
 const basicCheck = document.getElementById('basic-check');
@@ -168,39 +185,6 @@ function updateUI() {
     bikeCheck.classList.remove('hidden');
   } else if (drive === "motor" || drive === "hybrid") {
     basicCheck.classList.remove('hidden');
-  }
-}
-
-function showPenalties(vehicleType) {
-  const penaltySection = document.getElementById('penalty-section');
-  const penaltyList = document.getElementById('penalty-list');
-  penaltyList.innerHTML = "";
-
-  if (!penalties[vehicleType]) {
-    penaltySection.classList.add('hidden');
-    return;
-  }
-
-  penaltySection.classList.remove('hidden');
-
-  for (const [violation, details] of Object.entries(penalties[vehicleType])) {
-    // depth 0
-    const li0 = document.createElement('li');
-    li0.textContent = violation;
-    li0.className = "depth0";
-    penaltyList.appendChild(li0);
-
-    // depth 1
-    const li1 = document.createElement('li');
-    li1.textContent = details[0];
-    li1.className = "depth1";
-    penaltyList.appendChild(li1);
-
-    // depth 2
-    const li2 = document.createElement('li');
-    li2.textContent = details[1];
-    li2.className = "depth2";
-    penaltyList.appendChild(li2);
   }
 }
 
