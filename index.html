@@ -52,15 +52,14 @@
 
 <div class="section hidden" id="basic-check">
   <h3>2. 기본 조건 확인</h3>
-  <label><input type="radio" name="engine" id="engineOk" value="ok"> 배기량 125cc 이하 / 전기동력 11kw 이하</label>
-  <label><input type="radio" name="engine" id="engineExceed" value="exceed"> 배기량 125cc 초과 또는 전기동력 11kw 초과</label>
+  <label><input type="radio" name="engine" id="engineOk" value="ok">전기동력 11kw 이하</label>
+  <label><input type="radio" name="engine" id="engineExceed" value="exceed">전기동력 11kw 초과</label>
 </div>
 
 <div class="section hidden" id="speed-weight-check">
   <h3>3. 속도 / 중량 조건 확인</h3>
   <label><input type="checkbox" id="speedOk"> 시속 25km 이상에서 전동기 작동하지 않음</label>
   <label><input type="checkbox" id="weightOk"> 자체 중량 30kg 미만</label>
-  <label><input type="checkbox" id="ministerialordinance1"> 행정안전부령으로 정하는 것</label>
 </div>
 
 <div class="result" id="result">✅ 판별 결과가 여기에 표시됩니다.</div>
@@ -249,7 +248,7 @@ function evaluate() {
         resultName = (speedOk && weightOk && ministerialordinance1) ? "개인형이동장치" : "원동기장치자전거";
       } 
       else if (drive === "hybrid") {
-        resultName = (speedOk && weightOk && ministerialordinance1) ? "전기자전거(도로교통법상 자전거)" : "원동기장치자전거";
+        resultName = (speedOk && weightOk) ? "전기자전거(도로교통법상 자전거)" : "원동기장치자전거";
       }
     }
   }
