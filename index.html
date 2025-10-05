@@ -178,7 +178,7 @@ const penalties = {
   ]
 };
 
-// penalty 표시
+// 위반/처벌 표시
 function showPenalties(vehicleType) {
   const penaltySection = document.getElementById('penalty-section');
   const penaltyList = document.getElementById('penalty-list');
@@ -208,7 +208,6 @@ function updateUI() {
   document.querySelectorAll('#bike-check input, #basic-check input, #speed-weight-check input').forEach(el => {
     if(el.type === "checkbox") el.checked = false;
     else if(el.type === "radio") el.checked = false;
-    if(el.id === "ministerialordinance1") el.disabled = false;
   });
 
   if (drive === "human") bikeCheck.classList.remove('hidden');
@@ -234,24 +233,25 @@ function evaluate() {
     const engineExceed = document.getElementById('engineExceed').checked;
     const engineOk = document.getElementById('engineOk').checked;
 
-    if (drive === "motor" && engineExceed) resultName = "이륜자동차";
-    else if (engineExceed) resultName = "이륜자동차";
+    if (drive === "motor" && engineExceed) {
+      resultName = "이륜자동차";
+      speedWeightCheck.classList.add('hidden');
+    } 
+    else if (engineExceed) {
+      resultName = "이륜자동차";
+    } 
     else if (engineOk) {
+      // 전기동력 11kW 이하 → 행정안전부령 체크박스 제거
+      speedWeightCheck.classList.remove('hidden');
+      document.getElementById('ministerialLabel').style.display = 'none';
+
+      const speedOk = document.getElementById('speedOk').checked;
+      const weightOk = document.getElementById('weightOk').checked;
+
       if (drive === "hybrid") {
-        speedWeightCheck.classList.remove('hidden');
-        const speedOk = document.getElementById('speedOk').checked;
-        const weightOk = document.getElementById('weightOk').checked;
-        // hybrid + 11kW 이하 → 행정안전부령 자동 체크
-        const ministerial = document.getElementById('ministerialordinance1');
-        ministerial.checked = true;
-        ministerial.disabled = true;
         resultName = (speedOk && weightOk) ? "전기자전거(도로교통법상 자전거)" : "원동기장치자전거";
       } else if (drive === "motor") {
-        speedWeightCheck.classList.remove('hidden');
-        const speedOk = document.getElementById('speedOk').checked;
-        const weightOk = document.getElementById('weightOk').checked;
-        const ministerial = document.getElementById('ministerialordinance1').checked;
-        resultName = (speedOk && weightOk && ministerial) ? "개인형이동장치" : "원동기장치자전거";
+        resultName = (speedOk && weightOk) ? "개인형이동장치" : "원동기장치자전거";
       }
     }
   }
@@ -268,7 +268,10 @@ const basicCheck = document.getElementById('basic-check');
 const speedWeightCheck = document.getElementById('speed-weight-check');
 const resultDiv = document.getElementById('result');
 
-driveRadios.forEach(r => r.addEventListener('change', () => { updateUI(); evaluate(); }));
+driveRadios.forEach(r => r.addEventListener('change', () => { 
+  updateUI(); 
+  evaluate(); 
+}));
 engineRadios.forEach(r => r.addEventListener('change', evaluate));
 document.querySelectorAll('#bike-check input[type="checkbox"], #speed-weight-check input[type="checkbox"]').forEach(cb => cb.addEventListener('change', evaluate));
 </script>
