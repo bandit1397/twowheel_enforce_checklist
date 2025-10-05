@@ -60,7 +60,7 @@
   <h3>3. 속도 / 중량 조건 확인</h3>
   <label><input type="checkbox" id="speedOk"> 시속 25km 이상에서 전동기 작동하지 않음</label>
   <label><input type="checkbox" id="weightOk"> 자체 중량 30kg 미만</label>
-  <label><input type="checkbox" id="ministerialordinance1"> 행정안전부령으로 정하는 것</label>
+  <label id="ministerialLabel"><input type="checkbox" id="ministerialordinance1"> 행정안전부령으로 정하는 것</label>
 </div>
 
 <div class="result" id="result">✅ 판별 결과가 여기에 표시됩니다.</div>
@@ -178,7 +178,7 @@ const penalties = {
   ]
 };
 
-// 위반/처벌 표시
+// penalty 표시
 function showPenalties(vehicleType) {
   const penaltySection = document.getElementById('penalty-section');
   const penaltyList = document.getElementById('penalty-list');
@@ -208,6 +208,7 @@ function updateUI() {
   document.querySelectorAll('#bike-check input, #basic-check input, #speed-weight-check input').forEach(el => {
     if(el.type === "checkbox") el.checked = false;
     else if(el.type === "radio") el.checked = false;
+    if(el.id === "ministerialordinance1") el.disabled = false;
   });
 
   if (drive === "human") bikeCheck.classList.remove('hidden');
@@ -233,29 +234,24 @@ function evaluate() {
     const engineExceed = document.getElementById('engineExceed').checked;
     const engineOk = document.getElementById('engineOk').checked;
 
-    // ✅ motor + engineExceed → 바로 이륜자동차
-    if (drive === "motor" && engineExceed) {
-      resultName = "이륜자동차";
-      speedWeightCheck.classList.add('hidden'); // speed/weight 체크 안 보이게
-    } 
-    else if (engineExceed) {
-      resultName = "이륜자동차";
-    } 
+    if (drive === "motor" && engineExceed) resultName = "이륜자동차";
+    else if (engineExceed) resultName = "이륜자동차";
     else if (engineOk) {
-      // hybrid(페달+전동기) + 11kW 이하 → speed/weight 체크는 유지하되 '행정안전부령' 생략
       if (drive === "hybrid") {
         speedWeightCheck.classList.remove('hidden');
         const speedOk = document.getElementById('speedOk').checked;
         const weightOk = document.getElementById('weightOk').checked;
+        // hybrid + 11kW 이하 → 행정안전부령 자동 체크
+        const ministerial = document.getElementById('ministerialordinance1');
+        ministerial.checked = true;
+        ministerial.disabled = true;
         resultName = (speedOk && weightOk) ? "전기자전거(도로교통법상 자전거)" : "원동기장치자전거";
-      } 
-      // motor(전동기 단독) + 11kW 이하 → 기존 로직
-      else if (drive === "motor") {
+      } else if (drive === "motor") {
         speedWeightCheck.classList.remove('hidden');
         const speedOk = document.getElementById('speedOk').checked;
         const weightOk = document.getElementById('weightOk').checked;
-        const ministerialordinance1 = document.getElementById('ministerialordinance1').checked;
-        resultName = (speedOk && weightOk && ministerialordinance1) ? "개인형이동장치" : "원동기장치자전거";
+        const ministerial = document.getElementById('ministerialordinance1').checked;
+        resultName = (speedOk && weightOk && ministerial) ? "개인형이동장치" : "원동기장치자전거";
       }
     }
   }
