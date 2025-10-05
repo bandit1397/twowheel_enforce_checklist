@@ -237,19 +237,25 @@ function evaluate() {
     if (drive === "motor" && engineExceed) {
       resultName = "이륜자동차";
       speedWeightCheck.classList.add('hidden'); // speed/weight 체크 안 보이게
-    } else if (engineExceed) {
+    } 
+    else if (engineExceed) {
       resultName = "이륜자동차";
-    } else if (engineOk) {
-      speedWeightCheck.classList.remove('hidden');
-      const speedOk = document.getElementById('speedOk').checked;
-      const weightOk = document.getElementById('weightOk').checked;
-      const ministerialordinance1 = document.getElementById('ministerialordinance1').checked;
-
-      if (drive === "motor") {
-        resultName = (speedOk && weightOk && ministerialordinance1) ? "개인형이동장치" : "원동기장치자전거";
-      } 
-      else if (drive === "hybrid") {
+    } 
+    else if (engineOk) {
+      // hybrid(페달+전동기) + 11kW 이하 → speed/weight 체크는 유지하되 '행정안전부령' 생략
+      if (drive === "hybrid") {
+        speedWeightCheck.classList.remove('hidden');
+        const speedOk = document.getElementById('speedOk').checked;
+        const weightOk = document.getElementById('weightOk').checked;
         resultName = (speedOk && weightOk) ? "전기자전거(도로교통법상 자전거)" : "원동기장치자전거";
+      } 
+      // motor(전동기 단독) + 11kW 이하 → 기존 로직
+      else if (drive === "motor") {
+        speedWeightCheck.classList.remove('hidden');
+        const speedOk = document.getElementById('speedOk').checked;
+        const weightOk = document.getElementById('weightOk').checked;
+        const ministerialordinance1 = document.getElementById('ministerialordinance1').checked;
+        resultName = (speedOk && weightOk && ministerialordinance1) ? "개인형이동장치" : "원동기장치자전거";
       }
     }
   }
