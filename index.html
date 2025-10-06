@@ -77,15 +77,20 @@ const penalties = {
     { text: "□ 무면허위반", depth: 0 },
     { text: "► 도로교통법 제50조", depth: 1 },
     { text: "→ 30일 이하의 징역 또는 100만원 이하 벌금", depth: 2 },
+    
     { text: "□ 음주운전", depth: 0 },
     { text: "► 도로교통법 제44조", depth: 1 },
     { text: "→ 3년 이하 징역 또는 1천만원 이하 벌금", depth: 2 },
+    
     { text: "□ 통행방법위반", depth: 0 },
     { text: "► 도로교통법 제20조", depth: 1 },
     { text: "→ 범칙금 부과", depth: 2 },
+    
     { text: "□ 운전자준수사항위반", depth: 0 },
-    { text: "► 도로교통법 제65조", depth: 1 },
-    { text: "→ 범칙금 부과", depth: 2 }
+    { text: "► 안전모 미착용", depth: 1 },
+    { text: "→ 범칙금 2만원", depth: 2 },
+    { text: "► 승차정원 초과", depth: 1 },
+    { text: "→ 범칙금 4만원", depth: 2 },
   ],
 
   
@@ -106,8 +111,10 @@ const penalties = {
     { text: "→ 범칙금 3만원", depth: 2 },
     
     { text: "□ 운전자준수사항위반", depth: 0 },
-    { text: "► 도로교통법 제65조", depth: 1 },
-    { text: "→ 범칙금 부과", depth: 2 }
+    { text: "► 안전모 미착용", depth: 1 },
+    { text: "→ 범칙금 2만원", depth: 2 },
+    { text: "► 승차정원 초과", depth: 1 },
+    { text: "→ 범칙금 4만원", depth: 2 },
   ],
 
 
@@ -131,7 +138,7 @@ const penalties = {
     { text: "→ 범칙금 13만원", depth: 2 },
 
     
-    { text: "□ 통행방법위반", depth: 0 },
+    { text: "□ 통행구분위반", depth: 0 },
     { text: "► 보도운행", depth: 1 },
     { text: "→ 범칙금 3만원", depth: 2 },
     { text: "► 자전거도로 우선이용", depth: 1 },
@@ -152,29 +159,46 @@ const penalties = {
     { text: "□ 무면허위반", depth: 0 },
     { text: "► 무면허 규정 없음", depth: 1 },
     { text: "→ 모든 연령 가능", depth: 2 },
+    
     { text: "□ 음주운전", depth: 0 },
-    { text: "► 도로교통법 제44조", depth: 1 },
-    { text: "→ 범칙금/과태료", depth: 2 },
-    { text: "□ 통행방법위반", depth: 0 },
-    { text: "► 도로교통법 제20조", depth: 1 },
-    { text: "→ 적용", depth: 2 },
+    { text: "► 범칙금 3만원", depth: 1 },
+    
+    { text: "□ 통행구분위반", depth: 0 },
+    { text: "► 보도운행", depth: 1 },
+    { text: "→ 범칙금 3만원", depth: 2 },
+    { text: "► 자전거도로 우선이용", depth: 1 },
+    { text: "→ 범칙금 3만원", depth: 2 },
+    { text: "► 중앙선침범", depth: 1 },
+    { text: "→ 범칙금 3만원", depth: 2 },
+    
     { text: "□ 운전자준수사항위반", depth: 0 },
-    { text: "► 도로교통법 제65조", depth: 1 },
-    { text: "→ 적용", depth: 2 }
+    { text: "► 안전모 미착용", depth: 1 },
+    { text: "→ 처벌규정 없음", depth: 2 },
+    { text: "► 승차정원 초과", depth: 1 },
+    { text: "→ 범칙금 3만원", depth: 2 },
   ],
+  
   "자전거": [
     { text: "□ 무면허위반", depth: 0 },
     { text: "► 무면허 규정 없음", depth: 1 },
     { text: "→ 모든 연령 가능", depth: 2 },
+    
     { text: "□ 음주운전", depth: 0 },
-    { text: "► 도로교통법 제44조", depth: 1 },
-    { text: "→ 범칙금/과태료", depth: 2 },
-    { text: "□ 통행방법위반", depth: 0 },
-    { text: "► 도로교통법 제20조", depth: 1 },
-    { text: "→ 적용", depth: 2 },
+    { text: "► 범칙금 3만원", depth: 1 },
+    
+    { text: "□ 통행구분위반", depth: 0 },
+    { text: "► 보도운행", depth: 1 },
+    { text: "→ 범칙금 3만원", depth: 2 },
+    { text: "► 자전거도로 우선이용", depth: 1 },
+    { text: "→ 범칙금 3만원", depth: 2 },
+    { text: "► 중앙선침범", depth: 1 },
+    { text: "→ 범칙금 3만원", depth: 2 },
+    
     { text: "□ 운전자준수사항위반", depth: 0 },
-    { text: "► 도로교통법 제65조", depth: 1 },
-    { text: "→ 적용", depth: 2 }
+    { text: "► 안전모 미착용", depth: 1 },
+    { text: "→ 처벌규정 없음", depth: 2 },
+    { text: "► 승차정원 초과", depth: 1 },
+    { text: "→ 범칙금 3만원", depth: 2 },
   ]
 };
 
