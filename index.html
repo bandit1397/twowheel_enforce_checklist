@@ -58,7 +58,7 @@
 
 <div class="section hidden" id="speed-weight-check">
   <h3>3. 속도 / 중량 조건 확인</h3>
-  <label><input type="checkbox" id="speedOk"> 시속 25km 이상에서 전동기 작동하지 않음</label>
+  <label><input type="checkbox" id="speedOk"> 시속 25km 이상에서 전동기 작동 <span style="color:red; font-weight:bold;">X</span></label>
   <label><input type="checkbox" id="weightOk"> 자체 중량 30kg 미만</label>
   <label id="ministerialLabel"><input type="checkbox" id="ministerialordinance1"> 행정안전부령으로 정하는 것</label>
 </div>
@@ -93,17 +93,20 @@ const penalties = {
   
   "원동기장치자전거": [
     { text: "➤ 무면허위반", depth: 0 },
-    { text: "→ 벌금 30만원(경미범죄 현행범인체포)", depth: 2 },
+    { text: "→ 벌금 30만원<span style="font-size:0.70em;">
+      (경미범죄 현행범인체포 <span style="color:red; font-weight:bold;">X</span>)
+      </span>", depth: 2 },
     
     { text: "➤ 음주운전", depth: 0 },
-    { text: "→ 1년이하 징역 또는 500만원 이하 벌금(0.03퍼센트 이상 0.08퍼센트 미만)", depth: 2 },
+    { text: "→ 1년이하 징역 또는 500만원 이하 벌금<span style="font-size:0.70em;">(0.03퍼센트 이상 0.08퍼센트 미만)</span>", depth: 2 },
     
-    { text: "➤ 통행구분위반(보도운행 등)", depth: 0 },
+    { text: "➤ 통행구분위반<span style="font-size:0.70em;">(보도운행 등)</span>", depth: 0 },
     { text: "→ 범칙금", depth: 2 },
     
     { text: "➤ 운전자준수사항위반", depth: 0 },
     { text: "➢ 안전모 미착용", depth: 1 },
-    { text: "→ 범칙금(운전자), 과태료(동승자 미착용→운전자에게 부과)", depth: 2 },
+    { text: "→ 범칙금<span style="font-size:0.70em;">(운전자)</span>", depth: 2 },
+    { text: "→ 과태료<span style="font-size:0.70em;">(동승자 미착용→운전자에게 부과)</span>", depth: 2 },
     { text: "➢ 승차정원 초과", depth: 1 },
     { text: "→ 범칙금 4만원", depth: 2 },
   ],
@@ -115,10 +118,10 @@ const penalties = {
     { text: "→ 범칙금", depth: 2 },
     { text: "➢ 13세 미만(어린이)", depth: 1 },
     { text: "→ (보호자에게)과태료", depth: 2 },
-    { text: "※ 보호자가 어린이의 PM 운행사실 인지하고 있는 경우 보호자 과태료", depth: 2 },
-    { text: "※ 13세의 경우: 법의 사각지대", depth: 2 },
+    { text: "<span style="font-size:0.70em;">※ 어린이의 PM 운행사실 인지 필요</span>", depth: 2 },
+    { text: "<span style="font-size:0.70em;">※ 13세의 경우: 법의 사각지대</span>", depth: 2 },
      
-    { text: "➤ 음주운전(도로가 아닌 경우도 적용)", depth: 0 },
+    { text: "➤ 음주운전<span style="font-size:0.70em;">(도로가 아닌 경우도 적용)</span>", depth: 0 },
     { text: "➢ 음주운전", depth: 1 },
     { text: "→ 범칙금", depth: 2 },
     { text: "➢ 음주측정거부", depth: 1 },
@@ -126,16 +129,17 @@ const penalties = {
     { text: "➢ 음주측정방해", depth: 1 },
     { text: "→ 범칙금", depth: 2 },
    
-    { text: "➤ 통행구분위반(보도운행, 자전거도로 우선이용 등)", depth: 0 },
+    { text: "➤ 통행구분위반<span style="font-size:0.70em;">(보도운행, 자전거도로 우선이용 등)</span>", depth: 0 },
     { text: "→ 범칙금", depth: 2 },
 
     { text: "➤ 운전자준수사항위반", depth: 0 },
     { text: "➢ 안전모 미착용", depth: 1 },
-    { text: "→ 범칙금(운전자), 과태료(동승자 미착용→운전자에게 부과)", depth: 2 },
+    { text: "→ 범칙금<span style="font-size:0.70em;">(운전자)</span>", depth: 2 },
+    { text: "→ 과태료<span style="font-size:0.70em;">(동승자 미착용→운전자에게 부과)</span>", depth: 2 },
     { text: "➢ 승차정원 초과", depth: 1 },
     { text: "→ 범칙금 4만원", depth: 2 },
-    { text: "→ 전동킥보드 및 전동이륜평행차의 경우: 1명", depth: 2 },
-    { text: "→ 전동기의 동력만으로 움직일 수 있는 자전거의 경위: 2명", depth: 2 },
+    { text: "<span style="font-size:0.70em;">※ 전동킥보드 및 전동이륜평행차 정원: 1명</span>", depth: 2 },
+    { text: "<span style="font-size:0.70em;">※ 전동기의 동력만으로 움직일 수 있는 자전거 정원: 2명</span>", depth: 2 },
   ],
   
   "전기자전거(도로교통법상 자전거)": [
@@ -146,7 +150,7 @@ const penalties = {
     { text: "➤ 음주운전", depth: 0 },
     { text: "→ 범칙금 3만원", depth: 2 },
     
-    { text: "➤ 통행구분위반(보도운행, 자전거도로 우선이용 등)", depth: 0 },
+    { text: "➤ 통행구분위반<span style="font-size:0.70em;">(보도운행, 자전거도로 우선이용 등)</span>", depth: 0 },
     { text: "→ 범칙금", depth: 2 },
     
     { text: "➤ 운전자준수사항위반", depth: 0 },
@@ -163,7 +167,7 @@ const penalties = {
     { text: "➤ 음주운전", depth: 0 },
     { text: "→ 범칙금", depth: 2 },
     
-    { text: "➤ 통행구분위반(보도운행, 자전거도로 우선이용 등)", depth: 0 },
+    { text: "➤ 통행구분위반<span style="font-size:0.70em;">(보도운행, 자전거도로 우선이용 등)</span>", depth: 0 },
     { text: "→ 범칙금", depth: 2 },
  
     { text: "➤ 운전자준수사항위반", depth: 0 },
