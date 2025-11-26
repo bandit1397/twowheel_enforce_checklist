@@ -190,7 +190,7 @@ function showPenalties(vehicleType) {
 
   penalties[vehicleType].forEach((item, idx, arr) => {
     const li = document.createElement('li');
-    li.textContent = item.text;
+    li.innerHTML = item.text;
     li.className = "depth" + item.depth;
 
     if(item.depth === 0) {
