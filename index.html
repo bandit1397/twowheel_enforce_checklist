@@ -3,9 +3,19 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>이륜 단속 체크리스트 + 처벌규정</title>
+<title>PM 등 단속 체크리스트</title>
+  
 <style>
-  body { font-family: Arial, sans-serif; margin: 10px; padding: 0; background:#f9f9f9; font-size: 16px; }
+  html, body {
+    margin: 0;
+    padding: 0;
+    height: 100%;
+    min-height: 100vh;
+    font-family: "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+    background: #f5f7fa;
+    color: #222;
+  }
+  
   h2 { color: #2a4d91; font-size: 26px; }
   h3 { font-size: 20px; margin-bottom: 10px; }
   .section { margin: 15px 0; padding: 14px; border: 1px solid #aaa; border-radius: 8px; background:#fff; }
@@ -28,11 +38,59 @@
     ul li.depth2 { margin-left: 30px; }
     .section { padding: 12px; }
   }
+
+ /* 로고 화면 스타일 */
+  #logo-screen {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100%;
+    background: #000;
+  }
+
+  #logo-screen img {
+    max-width: 90%;
+    max-height: 90%;
+    cursor: pointer;
+    transition: transform 2s ease, opacity 2s ease;
+  }
+
+  /* 로고 사라질 때 애니메이션 */
+  .logo-zoom-out {
+    transform: scale(1.5); /* 확대 */
+    opacity: 0;             /* 사라짐 */
+  }
+
+  /* 매뉴얼 화면 숨김 + 초기 상태는 축소 */
+ #manual-screen {
+  /* display:none 제거 */
+  padding: 1rem;
+  transform: scale(0.8);
+  opacity: 0;
+  transition: transform 1s ease, opacity 1s ease;
+  pointer-events: none; /* 숨겨져 있을 때 클릭 막기 */
+}
+
+#manual-screen.show {
+  transform: scale(1);
+  opacity: 1;
+  pointer-events: auto;
+}
+
 </style>
 </head>
 <body>
 
-<h2>PM 등 단속 체크리스트</h2>
+<!-- 로고 화면 -->
+<div id="logo-screen">
+  <img src="logo.png" alt="수배자 매뉴얼 로고" id="logo-img">
+</div>
+
+<div id="manual-screen">
+
+<h2 style="text-align:center; margin-top:0; padding:1rem 0; font-size:1.8rem;">
+    PM 등 단속 체크리스트
+</h2>
 
 <div class="section">
   <h3>1. 동력 방식 선택</h3>
@@ -288,5 +346,52 @@ engineRadios.forEach(r => r.addEventListener('change', evaluate));
 document.querySelectorAll('#bike-check input[type="checkbox"], #speed-weight-check input[type="checkbox"]').forEach(cb => cb.addEventListener('change', evaluate));
 </script>
 
+<!-- 여기에 의견 남기기 버튼 삽입 -->
+<div style="margin-top: 1.5rem; text-align: center;">
+  <a href="https://docs.google.com/forms/d/e/1FAIpQLSckIGUsdSSDhNwaCH66-hoxq3SU-rK8XZhjyZrLfkwJc6CCmw/viewform?embedded=true" 
+     target="_blank"
+     style="
+       display: inline-block;
+       padding: 0.7rem 1.4rem;
+       background: #4CAF50;
+       color: white;
+       font-size: 1rem;
+       font-weight: bold;
+       border-radius: 6px;
+       text-decoration: none;
+       box-shadow: 0 3px 6px rgba(0,0,0,0.2);
+       transition: 0.2s;
+     "
+     onmouseover="this.style.opacity='0.85'"
+     onmouseout="this.style.opacity='1'"
+  >
+    오류 & 추가 의견 남기기
+  </a>
+</div>
+
+</div>
+
+
+<script>
+  const logoImg = document.getElementById('logo-img');
+  const logoScreen = document.getElementById('logo-screen');
+  const manualScreen = document.getElementById('manual-screen');
+
+  logoImg.addEventListener('click', () => {
+    logoImg.classList.add('logo-zoom-out');
+
+    setTimeout(() => {
+      logoScreen.style.display = 'none';
+    
+      // display는 항상 block, 클래스로 등장 효과 적용
+      manualScreen.classList.add('show');
+    }, 2000);
+  });
+</script>
+
+
+  
 </body>
 </html>
+
+
