@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>차종 판별 체크리스트 + 처벌규정</title>
+<title>이륜 단속 체크리스트 + 처벌규정</title>
 <style>
   body { font-family: Arial, sans-serif; margin: 10px; padding: 0; background:#f9f9f9; font-size: 16px; }
   h2 { color: #2a4d91; font-size: 26px; }
@@ -32,7 +32,7 @@
 </head>
 <body>
 
-<h2>🚦이륜(원동기장치자전거·PM·자전거)체크리스트</h2>
+<h2>🚦이륜 단속(원동기장치자전거·PM·자전거)체크리스트</h2>
 
 <div class="section">
   <h3>1. 동력 방식 선택</h3>
@@ -75,95 +75,102 @@
 const penalties = {
   "이륜자동차": [
     { text: "□ 무면허위반", depth: 0 },
-    { text: "► 도로교통법 제50조", depth: 1 },
-    { text: "→ 30일 이하의 징역 또는 100만원 이하 벌금", depth: 2 },
+    { text: "→ 1년 이하의 징역 또는 300만원 이하 벌금", depth: 2 },
+    
     { text: "□ 음주운전", depth: 0 },
-    { text: "► 도로교통법 제44조", depth: 1 },
-    { text: "→ 3년 이하 징역 또는 1천만원 이하 벌금", depth: 2 },
-    { text: "□ 통행방법위반", depth: 0 },
-    { text: "► 도로교통법 제20조", depth: 1 },
-    { text: "→ 범칙금 부과", depth: 2 },
+    { text: "→ 1년이하 징역 또는 500만원 이하 벌금(0.03퍼센트 이상 0.08퍼센트 미만)", depth: 2 },
+    
+    { text: "□ 통행구분위반(보도운행 등)", depth: 0 },
+    { text: "→ 범칙금", depth: 2 },
+     
     { text: "□ 운전자준수사항위반", depth: 0 },
-    { text: "► 도로교통법 제65조", depth: 1 },
-    { text: "→ 범칙금 부과", depth: 2 }
+    { text: "► 안전모 미착용", depth: 1 },
+    { text: "→ 범칙금(운전자), 과태료(동승자 미착용→운전자에게 부과)", depth: 2 },
+    { text: "► 승차정원 초과", depth: 1 },
+    { text: "→ 범칙금 4만원", depth: 2 },
   ],
+
+  
   "원동기장치자전거": [
     { text: "□ 무면허위반", depth: 0 },
-    { text: "► 도로교통법 제50조", depth: 1 },
-    { text: "→ 20만원 이하 벌금", depth: 2 },
+    { text: "→ 벌금 30만원(경미범죄 현행범인체포)", depth: 2 },
+    
     { text: "□ 음주운전", depth: 0 },
-    { text: "► 도로교통법 제44조", depth: 1 },
-    { text: "→ 500만원 이하 벌금", depth: 2 },
-    { text: "□ 통행방법위반", depth: 0 },
-    { text: "► 도로교통법 제20조", depth: 1 },
-    { text: "→ 범칙금 부과", depth: 2 },
+    { text: "→ 1년이하 징역 또는 500만원 이하 벌금(0.03퍼센트 이상 0.08퍼센트 미만)", depth: 2 },
+    
+    { text: "□ 통행구분위반(보도운행 등)", depth: 0 },
+    { text: "→ 범칙금", depth: 2 },
+    
     { text: "□ 운전자준수사항위반", depth: 0 },
-    { text: "► 도로교통법 제65조", depth: 1 },
-    { text: "→ 범칙금 부과", depth: 2 }
+    { text: "► 안전모 미착용", depth: 1 },
+    { text: "→ 범칙금(운전자), 과태료(동승자 미착용→운전자에게 부과)", depth: 2 },
+    { text: "► 승차정원 초과", depth: 1 },
+    { text: "→ 범칙금 4만원", depth: 2 },
   ],
+
+
   "개인형이동장치": [
     { text: "□ 무면허위반", depth: 0 },
     { text: "► 14세 이상", depth: 1 },
-    { text: "→ 범칙금 10만원", depth: 2 },
+    { text: "→ 범칙금", depth: 2 },
     { text: "► 13세 미만(어린이)", depth: 1 },
-    { text: "→ (보호자에게)과태료 10만원", depth: 2 },
+    { text: "→ (보호자에게)과태료", depth: 2 },
     { text: "※ 보호자가 어린이의 PM 운행사실 인지하고 있는 경우 보호자 과태료", depth: 2 },
     { text: "※ 13세의 경우: 법의 사각지대", depth: 2 },
-    
-    
+     
     { text: "□ 음주운전(도로가 아닌 경우도 적용)", depth: 0 },
     { text: "► 음주운전", depth: 1 },
-    { text: "→ 범칙금 10만원", depth: 2 },
+    { text: "→ 범칙금", depth: 2 },
     { text: "► 음주측정거부", depth: 1 },
-    { text: "→ 범칙금 13만원", depth: 2 },
+    { text: "→ 범칙금", depth: 2 },
     { text: "► 음주측정방해", depth: 1 },
-    { text: "→ 범칙금 13만원", depth: 2 },
-
-    
-    { text: "□ 통행방법위반", depth: 0 },
-    { text: "► 보도운행", depth: 1 },
-    { text: "→ 범칙금 3만원", depth: 2 },
-    { text: "► 자전거도로 우선이용", depth: 1 },
-    { text: "→ 범칙금 3만원", depth: 2 },
-    { text: "► 중앙선침범", depth: 1 },
-    { text: "→ 범칙금 3만원", depth: 2 },
+    { text: "→ 범칙금", depth: 2 },
+   
+    { text: "□ 통행구분위반(보도운행, 자전거도로 우선이용 등)", depth: 0 },
+    { text: "→ 범칙금", depth: 2 },
 
     { text: "□ 운전자준수사항위반", depth: 0 },
-    { text: "► 안전모 미착용(운전자)", depth: 1 },
-    { text: "→ 범칙금 2만원", depth: 2 },
-    { text: "► 안전모 미착용(동승자)", depth: 1 },
-    { text: "→ 과태료 2만원(운전자에게 부과/동승자 처벌X)", depth: 2 },
+    { text: "► 안전모 미착용", depth: 1 },
+    { text: "→ 범칙금(운전자), 과태료(동승자 미착용→운전자에게 부과)", depth: 2 },
     { text: "► 승차정원 초과", depth: 1 },
     { text: "→ 범칙금 4만원", depth: 2 },
+    { text: "→ 전동킥보드 및 전동이륜평행차의 경우: 1명", depth: 2 },
+    { text: "→ 전동기의 동력만으로 움직일 수 있는 자전거의 경위: 2명", depth: 2 },
   ],
   
   "전기자전거(도로교통법상 자전거)": [
     { text: "□ 무면허위반", depth: 0 },
     { text: "► 무면허 규정 없음", depth: 1 },
     { text: "→ 모든 연령 가능", depth: 2 },
+    
     { text: "□ 음주운전", depth: 0 },
-    { text: "► 도로교통법 제44조", depth: 1 },
-    { text: "→ 범칙금/과태료", depth: 2 },
-    { text: "□ 통행방법위반", depth: 0 },
-    { text: "► 도로교통법 제20조", depth: 1 },
-    { text: "→ 적용", depth: 2 },
+    { text: "► 범칙금 3만원", depth: 1 },
+    
+    { text: "□ 통행구분위반(보도운행, 자전거도로 우선이용 등)", depth: 0 },
+    { text: "→ 범칙금", depth: 2 },
+    
     { text: "□ 운전자준수사항위반", depth: 0 },
-    { text: "► 도로교통법 제65조", depth: 1 },
-    { text: "→ 적용", depth: 2 }
+    { text: "► 안전모 미착용", depth: 1 },
+    { text: "→ 처벌규정 없음", depth: 2 },
+    { text: "► 승차정원 초과", depth: 1 },
+    { text: "→ 처벌규정 없음?", depth: 2 },
   ],
+  
   "자전거": [
     { text: "□ 무면허위반", depth: 0 },
     { text: "► 무면허 규정 없음", depth: 1 },
-    { text: "→ 모든 연령 가능", depth: 2 },
+      
     { text: "□ 음주운전", depth: 0 },
-    { text: "► 도로교통법 제44조", depth: 1 },
-    { text: "→ 범칙금/과태료", depth: 2 },
-    { text: "□ 통행방법위반", depth: 0 },
-    { text: "► 도로교통법 제20조", depth: 1 },
-    { text: "→ 적용", depth: 2 },
+    { text: "► 범칙금", depth: 1 },
+    
+    { text: "□ 통행구분위반(보도운행, 자전거도로 우선이용 등)", depth: 0 },
+    { text: "→ 범칙금", depth: 2 },
+ 
     { text: "□ 운전자준수사항위반", depth: 0 },
-    { text: "► 도로교통법 제65조", depth: 1 },
-    { text: "→ 적용", depth: 2 }
+    { text: "► 안전모 미착용", depth: 1 },
+    { text: "→ 처벌규정 없음", depth: 2 },
+    { text: "► 승차정원 초과", depth: 1 },
+    { text: "→ 처벌규정 없음?", depth: 2 },
   ]
 };
 
