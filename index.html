@@ -75,31 +75,31 @@
 const penalties = {
   "이륜자동차": [
     { text: "➤ 무면허위반", depth: 0 },
-    { text: "→ 1년 이하의 징역 또는 300만원 이하 벌금", depth: 1 },
+    { text: "→ 1년 이하의 징역 또는 300만원 이하 벌금", depth: 2 },
     
     { text: "➤ 음주운전", depth: 0 },
-    { text: "→ 1년이하 징역 또는 500만원 이하 벌금(0.03퍼센트 이상 0.08퍼센트 미만)", depth: 1 },
+    { text: "→ 1년이하 징역 또는 500만원 이하 벌금(0.03퍼센트 이상 0.08퍼센트 미만)", depth: 2 },
     
     { text: "➤ 통행구분위반(보도운행 등)", depth: 0 },
-    { text: "→ 범칙금", depth: 1 },
+    { text: "→ 범칙금", depth: 2 },
      
     { text: "➤ 운전자준수사항위반", depth: 0 },
-    { text: "► 안전모 미착용", depth: 1 },
+    { text: "➢ 안전모 미착용", depth: 1 },
     { text: "→ 범칙금(운전자), 과태료(동승자 미착용→운전자에게 부과)", depth: 2 },
-    { text: "► 승차정원 초과", depth: 1 },
+    { text: "➢ 승차정원 초과", depth: 1 },
     { text: "→ 범칙금 4만원", depth: 2 },
   ],
 
   
   "원동기장치자전거": [
     { text: "➤ 무면허위반", depth: 0 },
-    { text: "→ 벌금 30만원(경미범죄 현행범인체포)", depth: 1 },
+    { text: "→ 벌금 30만원(경미범죄 현행범인체포)", depth: 2 },
     
     { text: "➤ 음주운전", depth: 0 },
-    { text: "→ 1년이하 징역 또는 500만원 이하 벌금(0.03퍼센트 이상 0.08퍼센트 미만)", depth: 1 },
+    { text: "→ 1년이하 징역 또는 500만원 이하 벌금(0.03퍼센트 이상 0.08퍼센트 미만)", depth: 2 },
     
     { text: "➤ 통행구분위반(보도운행 등)", depth: 0 },
-    { text: "→ 범칙금", depth: 1 },
+    { text: "→ 범칙금", depth: 2 },
     
     { text: "➤ 운전자준수사항위반", depth: 0 },
     { text: "➢ 안전모 미착용", depth: 1 },
@@ -126,8 +126,8 @@ const penalties = {
     { text: "➢ 음주측정방해", depth: 1 },
     { text: "→ 범칙금", depth: 2 },
    
-    { text: "□ 통행구분위반(보도운행, 자전거도로 우선이용 등)", depth: 0 },
-    { text: "→ 범칙금", depth: 1 },
+    { text: "➤ 통행구분위반(보도운행, 자전거도로 우선이용 등)", depth: 0 },
+    { text: "→ 범칙금", depth: 2 },
 
     { text: "➤ 운전자준수사항위반", depth: 0 },
     { text: "➢ 안전모 미착용", depth: 1 },
@@ -144,10 +144,10 @@ const penalties = {
     { text: "→ 모든 연령 가능", depth: 2 },
     
     { text: "➤ 음주운전", depth: 0 },
-    { text: "→ 범칙금 3만원", depth: 1 },
+    { text: "→ 범칙금 3만원", depth: 2 },
     
     { text: "➤ 통행구분위반(보도운행, 자전거도로 우선이용 등)", depth: 0 },
-    { text: "→ 범칙금", depth: 1 },
+    { text: "→ 범칙금", depth: 2 },
     
     { text: "➤ 운전자준수사항위반", depth: 0 },
     { text: "➢ 안전모 미착용", depth: 1 },
@@ -158,10 +158,10 @@ const penalties = {
   
   "자전거": [
     { text: "➤ 무면허위반", depth: 0 },
-    { text: "→ 무면허 규정 없음", depth: 1 },
+    { text: "→ 무면허 규정 없음", depth: 2 },
       
     { text: "➤ 음주운전", depth: 0 },
-    { text: "→ 범칙금", depth: 1 },
+    { text: "→ 범칙금", depth: 2 },
     
     { text: "➤ 통행구분위반(보도운행, 자전거도로 우선이용 등)", depth: 0 },
     { text: "→ 범칙금", depth: 2 },
