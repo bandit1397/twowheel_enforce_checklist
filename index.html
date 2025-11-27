@@ -94,7 +94,7 @@
 
 <div class="section">
   <h3>1. 동력 방식 선택</h3>
-  <label><input type="radio" name="drive" value="human"> 사람의 힘으로 페달 or 손페달 사용</label>
+  <label><input type="radio" name="drive" value="human"> 페달 or 손페<span style="font-size:0.70em;">(Only 사람의 힘)</span></label>
   <label><input type="radio" name="drive" value="motor"> 전동기 단독 가능<span style="font-size:0.70em;">(스로틀, 파스/스로틀 겸용)</span></label>
   <label><input type="radio" name="drive" value="hybrid"> 페달 + 전동기 동시 동력<span style="font-size:0.70em;">(전동기 단독 불가)</span></label>
 </div>
@@ -133,10 +133,10 @@
 const penalties = {
   "이륜자동차": [
     { text: "➤ 무면허위반", depth: 0 },
-    { text: "→ 1년 이하의 징역 또는 300만원 이하 벌금", depth: 2 },
+    { text: "→ 1년 ↓ 또는 300만원 ↓", depth: 2 },
     
     { text: "➤ 음주운전", depth: 0 },
-    { text: '→ 1년이하 징역 또는 500만원 이하 벌금<span style="font-size:0.70em;">(0.03퍼센트 이상 0.08퍼센트 미만)</span>', depth: 2 },
+    { text: '→ 1년 ↓ 또는 500만원 ↓<span style="font-size:0.70em;">(0.03퍼센트 이상 0.08퍼센트 미만)</span>', depth: 2 },
     
     { text: "➤ 통행구분위반(보도운행 등)", depth: 0 },
     { text: "→ 범칙금", depth: 2 },
@@ -155,7 +155,7 @@ const penalties = {
 
     
     { text: "➤ 음주운전", depth: 0 },
-    { text: '→ 1년이하 징역 또는 500만원 이하 벌금<span style="font-size:0.70em;">(0.03퍼센트 이상 0.08퍼센트 미만)</span>', depth: 2 },
+    { text: '→ 1년 ↓ 또는 500만원 ↓<span style="font-size:0.70em;">(0.03퍼센트 이상 0.08퍼센트 미만)</span>', depth: 2 },
     
     { text: '➤ 통행구분위반<span style="font-size:0.70em;">(보도운행 등)</span>', depth: 0 },
     { text: "→ 범칙금", depth: 2 },
