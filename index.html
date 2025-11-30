@@ -267,27 +267,31 @@ function showPenalties(vehicleType) {
 
     if(item.depth === 0) {
       li.addEventListener('click', () => {
-        let isHidden = false;
-        // 아래 항목 중 하나라도 display가 none이면 전체 보여주기
         let i = idx + 1;
+        let shouldShow = false;
+
+        // 하위 항목 중 하나라도 숨김이면 모두 보여주기
         while(i < arr.length && arr[i].depth > 0) {
           const el = penaltyList.children[i];
-          if(el.style.display === 'none') {
-            isHidden = true;
+          // inline style이 없으면 getComputedStyle로 확인
+          const display = el.style.display || window.getComputedStyle(el).display;
+          if(display === 'none') {
+            shouldShow = true;
             break;
           }
           i++;
         }
 
-        // 전체 토글
+        // 실제 토글
         i = idx + 1;
         while(i < arr.length && arr[i].depth > 0) {
           const el = penaltyList.children[i];
-          el.style.display = isHidden ? 'list-item' : 'none';
+          el.style.display = shouldShow ? 'list-item' : 'none';
           i++;
         }
       });
     }
+
 
     penaltyList.appendChild(li);
   });
