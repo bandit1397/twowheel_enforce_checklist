@@ -273,24 +273,26 @@ function showPenalties(vehicleType) {
         let i = idx + 1;
         let hasHidden = false;
 
-        // 하위 목록 중 하나라도 숨겨져 있으면 → 펼쳐야 함
+        // 하위(depth>0) 중 하나라도 hidden이면 전체 펼치기
         while(i < arr.length && arr[i].depth > 0) {
           const el = penaltyList.children[i];
-          if(el.style.display === 'none') { 
-            hasHidden = true; 
-            break; 
+          if(el.style.display === 'none' || el.style.display === '') {
+            hasHidden = true;
+            break;
           }
           i++;
         }
 
-        // 하위 depth1·depth2·depth3 모두 toggle
+        // 토글 실행
         i = idx + 1;
         while(i < arr.length && arr[i].depth > 0) {
-          penaltyList.children[i].style.display = hasHidden ? 'list-item' : 'none';
+          const el = penaltyList.children[i];
+          el.style.display = hasHidden ? 'list-item' : 'none';
           i++;
         }
       });
     }
+
 
 
     penaltyList.appendChild(li);
