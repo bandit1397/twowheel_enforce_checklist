@@ -96,7 +96,7 @@
   <h3>1. 동력 방식 선택</h3>
   <label><input type="radio" name="drive" value="human"> 페달 or 손페달<span style="font-size:0.70em;">(Only 사람의 힘)</span></label>
   <label><input type="radio" name="drive" value="motor"> 전동기 단독 가능<span style="font-size:0.70em;">(스로틀, 파스/스로틀 겸용)</span></label>
-  <label><input type="radio" name="drive" value="hybrid"> 페달 + 전동기 동시 동력<span style="font-size:0.70em;">(전동기 단독 불가)</span></label>
+  <label><input type="radio" name="drive" value="hybrid"> 전동기 단독 불가<span style="font-size:0.70em;">(페달 + 전동기 동시 동력)</span></label>
 </div>
 
 <div class="section hidden" id="bike-check">
@@ -270,25 +270,22 @@ function showPenalties(vehicleType) {
     if(item.depth === 0) {
       li.addEventListener('click', () => {
         let i = idx + 1;
-        let shouldShow = false;
+        let hasHidden = false;
 
-        // 하위 항목 중 하나라도 숨김이면 모두 보여주기
+        // 하위 목록 중 하나라도 숨겨져 있으면 → 펼쳐야 함
         while(i < arr.length && arr[i].depth > 0) {
           const el = penaltyList.children[i];
-          // inline style이 없으면 getComputedStyle로 확인
-          const display = el.style.display || window.getComputedStyle(el).display;
-          if(display === 'none') {
-            shouldShow = true;
-            break;
+          if(el.style.display === 'none') { 
+            hasHidden = true; 
+            break; 
           }
           i++;
         }
 
-        // 실제 토글
+        // 하위 depth1·depth2·depth3 모두 toggle
         i = idx + 1;
         while(i < arr.length && arr[i].depth > 0) {
-          const el = penaltyList.children[i];
-          el.style.display = shouldShow ? 'list-item' : 'none';
+          penaltyList.children[i].style.display = hasHidden ? 'list-item' : 'none';
           i++;
         }
       });
