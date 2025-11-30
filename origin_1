@@ -96,7 +96,7 @@
   <h3>1. 동력 방식 선택</h3>
   <label><input type="radio" name="drive" value="human"> 페달 or 손페달<span style="font-size:0.70em;">(Only 사람의 힘)</span></label>
   <label><input type="radio" name="drive" value="motor"> 전동기 단독 가능<span style="font-size:0.70em;">(스로틀, 파스/스로틀 겸용)</span></label>
-  <label><input type="radio" name="drive" value="hybrid"> 페달 + 전동기 동시 동력<span style="font-size:0.70em;">(전동기 단독 불가)</span></label>
+  <label><input type="radio" name="drive" value="hybrid"> 전동기 단독 불가<span style="font-size:0.70em;">(페달 + 전동기 동시 동력)</span></label>
 </div>
 
 <div class="section hidden" id="bike-check">
@@ -142,17 +142,18 @@ const penalties = {
     { text: "→ 1년 ↓ 또는 300만원 ↓", depth: 2 },
     
     { text: '➤ 음주운전<span style="font-size:0.70em; color:red;">(도로가 아닌 경우도 적용)</span>', depth: 0 },
-    { text: '→ 1년 ↓ 또는 500만원 ↓<span style="font-size:0.70em;">(0.03퍼센트 이상 0.08퍼센트 미만)</span>', depth: 2 },
+    { text: '→ 1년 ↓ 또는 500만원 ↓ 등', depth: 2 },
     
     { text: "➤ 통행구분위반", depth: 0 },
     { text: "➢ 보도운행 등", depth: 1 },
     { text: "→ 범칙금", depth: 2 },
      
-    { text: "➤ 운전자준수사항위반", depth: 0 },
+    { text: "➤ 운전자준수사항위반 등", depth: 0 },
     { text: "➢ 안전모 미착용", depth: 1 },
-    { text: "→ 범칙금(운전자), 과태료(동승자 미착용→운전자에게 부과)", depth: 2 },
+    { text: '→ 범칙금<span style="font-size:0.70em;">(운전자)</span>', depth: 2 },
+    { text: '→ 과태료<span style="font-size:0.70em;">(동승자 미착용→운전자에게 부과)</span>', depth: 2 },
     { text: "➢ 승차정원 초과", depth: 1 },
-    { text: "→ 범칙금 4만원", depth: 2 },
+    { text: "→ 범칙금", depth: 2 },
   ],
 
   
@@ -162,18 +163,18 @@ const penalties = {
 
     
     { text: '➤ 음주운전<span style="font-size:0.70em; color:red;">(도로가 아닌 경우도 적용)</span>', depth: 0 },
-    { text: '→ 1년 ↓ 또는 500만원 ↓<span style="font-size:0.70em;">(0.03퍼센트 이상 0.08퍼센트 미만)</span>', depth: 2 },
+    { text: '→ 1년 ↓ 또는 500만원 ↓ 등', depth: 2 },
     
     { text: "➤ 통행구분위반", depth: 0 },
     { text: "➢ 보도운행 등", depth: 1 },
     { text: "→ 범칙금", depth: 2 },
     
-    { text: "➤ 운전자준수사항위반", depth: 0 },
+    { text: "➤ 운전자준수사항위반 등", depth: 0 },
     { text: "➢ 안전모 미착용", depth: 1 },
     { text: '→ 범칙금<span style="font-size:0.70em;">(운전자)</span>', depth: 2 },
     { text: '→ 과태료<span style="font-size:0.70em;">(동승자 미착용→운전자에게 부과)</span>', depth: 2 },
     { text: "➢ 승차정원 초과", depth: 1 },
-    { text: "→ 범칙금 4만원", depth: 2 },
+    { text: "→ 범칙금", depth: 2 },
   ],
 
 
@@ -199,12 +200,12 @@ const penalties = {
     { text: "➢ 자전거도로 우선 운행 의무", depth: 1 },
     { text: "→ 범칙금", depth: 2 },
 
-    { text: "➤ 운전자준수사항위반", depth: 0 },
+    { text: "➤ 운전자준수사항위반 등", depth: 0 },
     { text: "➢ 안전모 미착용", depth: 1 },
     { text: '→ 범칙금<span style="font-size:0.70em;">(운전자)</span>', depth: 2 },
     { text: '→ 과태료<span style="font-size:0.70em;">(동승자 미착용→운전자에게 부과)</span>', depth: 2 },
     { text: "➢ 승차정원 초과", depth: 1 },
-    { text: "→ 범칙금 4만원", depth: 2 },
+    { text: "→ 범칙금", depth: 2 },
     { text: '<span style="font-size:0.70em;">※ 전동킥보드 및 전동이륜평행차 정원: 1명</span>', depth: 2 },
     { text: '<span style="font-size:0.70em;">※ 전동기의 동력만으로 움직일 수 있는 자전거 정원: 2명</span>', depth: 2 },
   ],
@@ -215,14 +216,14 @@ const penalties = {
     { text: "→ 모든 연령 가능", depth: 2 },
     
     { text: '➤ 음주운전<span style="font-size:0.70em; color:red;">(도로가 아닌 경우도 적용)</span>', depth: 0 },
-    { text: "→ 범칙금 3만원", depth: 2 },
+    { text: "→ 범칙금", depth: 2 },
     
     { text: "➤ 통행구분위반", depth: 0 },
     { text: "➢ 보도운행", depth: 1 },
     { text: "➢ 자전거도로 우선 운행 의무", depth: 1 },
     { text: "→ 범칙금", depth: 2 },
     
-    { text: "➤ 운전자준수사항위반", depth: 0 },
+    { text: "➤ 운전자준수사항위반 등", depth: 0 },
     { text: "➢ 안전모 미착용", depth: 1 },
     { text: "→ 처벌규정 없음", depth: 2 },
     { text: "➢ 승차정원 초과", depth: 1 },
@@ -241,7 +242,7 @@ const penalties = {
     { text: "➢ 자전거도로 우선 운행 의무", depth: 1 },
     { text: "→ 범칙금", depth: 2 },
  
-    { text: "➤ 운전자준수사항위반", depth: 0 },
+    { text: "➤ 운전자준수사항위반 등", depth: 0 },
     { text: "➢ 안전모 미착용", depth: 1 },
     { text: "→ 처벌규정 없음", depth: 2 },
     { text: "➢ 승차정원 초과", depth: 1 },
@@ -268,13 +269,29 @@ function showPenalties(vehicleType) {
     if(item.depth === 0) {
       li.addEventListener('click', () => {
         let i = idx + 1;
+        let hasHidden = false;
+
+        // 하위(depth>0) 중 하나라도 hidden이면 전체 펼치기
         while(i < arr.length && arr[i].depth > 0) {
           const el = penaltyList.children[i];
-          el.style.display = (el.style.display === 'none') ? 'list-item' : 'none';
+          if(el.style.display === 'none' || el.style.display === '') {
+            hasHidden = true;
+            break;
+          }
+          i++;
+        }
+
+        // 토글 실행
+        i = idx + 1;
+        while(i < arr.length && arr[i].depth > 0) {
+          const el = penaltyList.children[i];
+          el.style.display = hasHidden ? 'list-item' : 'none';
           i++;
         }
       });
     }
+
+
 
     penaltyList.appendChild(li);
   });
