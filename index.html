@@ -267,10 +267,23 @@ function showPenalties(vehicleType) {
 
     if(item.depth === 0) {
       li.addEventListener('click', () => {
+        let isHidden = false;
+        // 아래 항목 중 하나라도 display가 none이면 전체 보여주기
         let i = idx + 1;
         while(i < arr.length && arr[i].depth > 0) {
           const el = penaltyList.children[i];
-          el.style.display = (el.style.display === 'none') ? 'list-item' : 'none';
+          if(el.style.display === 'none') {
+            isHidden = true;
+            break;
+          }
+          i++;
+        }
+
+        // 전체 토글
+        i = idx + 1;
+        while(i < arr.length && arr[i].depth > 0) {
+          const el = penaltyList.children[i];
+          el.style.display = isHidden ? 'list-item' : 'none';
           i++;
         }
       });
