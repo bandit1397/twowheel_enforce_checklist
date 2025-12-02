@@ -134,39 +134,20 @@
   <ul id="penalty-list"></ul>
 </div>
 
-<!-- 📌 여기에 토글 버튼 삽입 -->
+<!--  여기에 토글 버튼 삽입 -->
 <button id="toggle-reference" style="
   width:100%; padding:10px; margin-top:10px;
   font-size:16px; font-weight:bold;
   background:#2a4d91; color:#fff; border:none; border-radius:6px;
 ">
-  📌 참고사항 열기/닫기
+   참고사항
 </button>
-
-
-
+  
 <div class="section hidden" id="reference-section">
-  <h3>참고사항</h3>
-
-  <ul style="list-style:none; padding-left:0; line-height:1.6;">
-    <li style="font-weight:bold; margin-top:10px;">📌 PDA 운용</li>
-    <li>ㆍ PDA 점검 절차</li>
-    <li>ㆍ 현장 기록 방법</li>
-    <li>ㆍ 사진·영상 증거 확보 요령</li>
-
-    <li style="font-weight:bold; margin-top:15px;">📌 범칙금 절차</li>
-    <li>ㆍ 범칙행위 확인 및 단속</li>
-    <li>ㆍ 신분 확인 → 고지서 작성 → 기한 안내</li>
-
-    <li style="font-weight:bold; margin-top:15px;">📌 과태료 절차</li>
-    <li>ㆍ 현장 증거 확보</li>
-    <li>ㆍ 사전통지 → 의견제출 → 과태료 부과</li>
-
-    <li style="font-weight:bold; margin-top:15px;">📌 자전거 및 PM 단속 절차</li>
-    <li>ㆍ 안전모 / 보도주행 / 음주 여부 확인</li>
-    <li>ㆍ PM 면허 여부 / 도로·보도 통행 기준 확인</li>
-  </ul>
+  <ul id="reference-list"></ul>
 </div>
+
+
 
 <script>
 // penalties 정의
@@ -281,15 +262,72 @@ const penalties = {
   ]
 };
 
-// 위반/처벌 표시
+const references = [
+  { text: "➤ 폴리폰 범칙금/과태료 발부 요령", depth: 0 },
+  { text: "➢ 범칙금 발부", depth: 1 },
+  { text: "→ 외근단속발부>차량정보>차량구분", depth: 2 },
+  { text: "➢ 과태료 발부", depth: 1 },
+  { text: "→ 현장과태료>차량정보>차량구분", depth: 2 },
+  
+  { text: "➤ 기타", depth: 0 },
+  { text: "➢ 기타 1", depth: 1 },
+  { text: "→ 기타1-1", depth: 2 },
+  { text: "➢기타 2", depth: 1 },
+  { text: "→ 기타2-1", depth: 2 }
+];
+
+// 참고사항 렌더링
+function renderReferences() {
+  const ul = document.getElementById("reference-list");
+  ul.innerHTML = "";
+
+  references.forEach((item, idx, arr) => {
+    const li = document.createElement("li");
+    li.innerHTML = item.text;
+    li.className = "depth" + item.depth;
+
+    if (item.depth === 0) {
+      li.style.fontWeight = "bold";
+      li.style.cursor = "pointer";
+
+      li.addEventListener("click", () => {
+        let i = idx + 1;
+        let hasHidden = false;
+
+        // 하위(depth>0) 중 하나라도 숨겨져 있으면 펼치기
+        while (i < arr.length && arr[i].depth > 0) {
+          const el = ul.children[i];
+          if (el.style.display === "none" || el.style.display === "") {
+            hasHidden = true;
+            break;
+          }
+          i++;
+        }
+
+        // 토글 실행
+        i = idx + 1;
+        while (i < arr.length && arr[i].depth > 0) {
+          const el = ul.children[i];
+          el.style.display = hasHidden ? "list-item" : "none";
+          i++;
+        }
+      });
+    }
+
+    ul.appendChild(li);
+  });
+}
+
 function showPenalties(vehicleType) {
   const penaltySection = document.getElementById('penalty-section');
   const penaltyList = document.getElementById('penalty-list');
   penaltyList.innerHTML = "";
+
   if (!penalties[vehicleType]) { 
     penaltySection.classList.add('hidden'); 
     return; 
   }
+
   penaltySection.classList.remove('hidden');
 
   penalties[vehicleType].forEach((item, idx, arr) => {
@@ -302,7 +340,6 @@ function showPenalties(vehicleType) {
         let i = idx + 1;
         let hasHidden = false;
 
-        // 하위(depth>0) 중 하나라도 hidden이면 전체 펼치기
         while(i < arr.length && arr[i].depth > 0) {
           const el = penaltyList.children[i];
           if(el.style.display === 'none' || el.style.display === '') {
@@ -312,7 +349,6 @@ function showPenalties(vehicleType) {
           i++;
         }
 
-        // 토글 실행
         i = idx + 1;
         while(i < arr.length && arr[i].depth > 0) {
           const el = penaltyList.children[i];
@@ -321,8 +357,6 @@ function showPenalties(vehicleType) {
         }
       });
     }
-
-
 
     penaltyList.appendChild(li);
   });
@@ -413,7 +447,8 @@ document.querySelectorAll('#bike-check input[type="checkbox"], #speed-weight-che
     ref.classList.toggle("hidden");
   });
 
-
+// 🔹 여기에 추가: 참고사항 목록 초기 렌더링
+renderReferences();
 
   
 </script>
