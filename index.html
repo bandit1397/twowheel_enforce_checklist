@@ -134,6 +134,17 @@
   <ul id="penalty-list"></ul>
 </div>
 
+<!-- 📌 여기에 토글 버튼 삽입 -->
+<button id="toggle-reference" style="
+  width:100%; padding:10px; margin-top:10px;
+  font-size:16px; font-weight:bold;
+  background:#2a4d91; color:#fff; border:none; border-radius:6px;
+">
+  📌 참고사항 열기/닫기
+</button>
+
+
+
 <div class="section hidden" id="reference-section">
   <h3>참고사항</h3>
 
@@ -395,6 +406,16 @@ const resultDiv = document.getElementById('result');
 driveRadios.forEach(r => r.addEventListener('change', () => { updateUI(); evaluate(); }));
 engineRadios.forEach(r => r.addEventListener('change', evaluate));
 document.querySelectorAll('#bike-check input[type="checkbox"], #speed-weight-check input[type="checkbox"]').forEach(cb => cb.addEventListener('change', evaluate));
+
+// 📌 참고사항 토글 기능 → 여기에 추가!
+  document.getElementById("toggle-reference").addEventListener("click", () => {
+    const ref = document.getElementById("reference-section");
+    ref.classList.toggle("hidden");
+  });
+
+
+
+  
 </script>
 
 <!-- 여기에 의견 남기기 버튼 삽입 -->
