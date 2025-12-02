@@ -147,25 +147,7 @@
 
 <div class="section hidden" id="reference-section">
   <h3>참고사항</h3>
-
-  <ul style="list-style:none; padding-left:0; line-height:1.6;">
-    <li style="font-weight:bold; margin-top:10px;"> PDA 운용</li>
-    <li>ㆍ PDA 점검 절차</li>
-    <li>ㆍ 현장 기록 방법</li>
-    <li>ㆍ 사진·영상 증거 확보 요령</li>
-
-    <li style="font-weight:bold; margin-top:15px;"> 범칙금 절차</li>
-    <li>ㆍ 범칙행위 확인 및 단속</li>
-    <li>ㆍ 신분 확인 → 고지서 작성 → 기한 안내</li>
-
-    <li style="font-weight:bold; margin-top:15px;"> 과태료 절차</li>
-    <li>ㆍ 현장 증거 확보</li>
-    <li>ㆍ 사전통지 → 의견제출 → 과태료 부과</li>
-
-    <li style="font-weight:bold; margin-top:15px;"> 자전거 및 PM 단속 절차</li>
-    <li>ㆍ 안전모 / 보도주행 / 음주 여부 확인</li>
-    <li>ㆍ PM 면허 여부 / 도로·보도 통행 기준 확인</li>
-  </ul>
+  <ul id="reference-list"></ul>
 </div>
 
 <script>
@@ -280,6 +262,58 @@ const penalties = {
     { text: "→ 규정 없음", depth: 2 },
   ]
 };
+
+const references = [
+  { text: "PDA 운용", depth: 0 },
+  { text: "ㆍ PDA 점검 절차", depth: 1 },
+  { text: "ㆍ 현장 기록 방법", depth: 1 },
+  { text: "ㆍ 사진·영상 증거 확보 요령", depth: 1 },
+
+  { text: "범칙금 절차", depth: 0 },
+  { text: "ㆍ 범칙행위 확인 및 단속", depth: 1 },
+  { text: "ㆍ 신분 확인 → 고지서 작성 → 기한 안내", depth: 1 },
+
+  { text: "과태료 절차", depth: 0 },
+  { text: "ㆍ 현장 증거 확보", depth: 1 },
+  { text: "ㆍ 사전통지 → 의견제출 → 과태료 부과", depth: 1 },
+
+  { text: "자전거 및 PM 단속 절차", depth: 0 },
+  { text: "ㆍ 안전모 / 보도주행 / 음주 여부 확인", depth: 1 },
+  { text: "ㆍ PM 면허 여부 / 도로·보도 통행 기준 확인", depth: 1 }
+];
+
+// 참고사항 렌더링
+function renderReferences() {
+  const ul = document.getElementById("reference-list");
+  ul.innerHTML = "";
+
+  references.forEach((item, idx, arr) => {
+    const li = document.createElement("li");
+    li.innerHTML = item.text;
+    li.className = "depth" + item.depth;
+
+    if (item.depth === 0) {
+      li.style.fontWeight = "bold";
+      li.style.cursor = "pointer";
+      li.addEventListener("click", () => {
+        let i = idx + 1;
+        let hasHidden = false;
+        while (i < arr.length && arr[i].depth > 0) {
+          const el = ul.children[i];
+          if (el.style.display === "none" || el.style.display === "") {
+            hasHidden = true;
+            break;
+          }
+          i++;
+        }
+        i = idx + 1;
+        while (i < arr.length && arr[i].depth > 0) {
+          const el = ul.children[i];
+          el.style.display = hasHidden ? "list-item" : "none";
+          i++;
+        }
+      });
+    }
 
 // 위반/처벌 표시
 function showPenalties(vehicleType) {
