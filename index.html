@@ -295,9 +295,12 @@ function renderReferences() {
     if (item.depth === 0) {
       li.style.fontWeight = "bold";
       li.style.cursor = "pointer";
+
       li.addEventListener("click", () => {
         let i = idx + 1;
         let hasHidden = false;
+
+        // 하위(depth>0) 중 하나라도 숨겨져 있으면 펼치기
         while (i < arr.length && arr[i].depth > 0) {
           const el = ul.children[i];
           if (el.style.display === "none" || el.style.display === "") {
@@ -306,6 +309,8 @@ function renderReferences() {
           }
           i++;
         }
+
+        // 토글 실행
         i = idx + 1;
         while (i < arr.length && arr[i].depth > 0) {
           const el = ul.children[i];
@@ -315,15 +320,20 @@ function renderReferences() {
       });
     }
 
-// 위반/처벌 표시
+    ul.appendChild(li);
+  });
+}
+
 function showPenalties(vehicleType) {
   const penaltySection = document.getElementById('penalty-section');
   const penaltyList = document.getElementById('penalty-list');
   penaltyList.innerHTML = "";
+
   if (!penalties[vehicleType]) { 
     penaltySection.classList.add('hidden'); 
     return; 
   }
+
   penaltySection.classList.remove('hidden');
 
   penalties[vehicleType].forEach((item, idx, arr) => {
@@ -336,7 +346,6 @@ function showPenalties(vehicleType) {
         let i = idx + 1;
         let hasHidden = false;
 
-        // 하위(depth>0) 중 하나라도 hidden이면 전체 펼치기
         while(i < arr.length && arr[i].depth > 0) {
           const el = penaltyList.children[i];
           if(el.style.display === 'none' || el.style.display === '') {
@@ -346,7 +355,6 @@ function showPenalties(vehicleType) {
           i++;
         }
 
-        // 토글 실행
         i = idx + 1;
         while(i < arr.length && arr[i].depth > 0) {
           const el = penaltyList.children[i];
@@ -355,8 +363,6 @@ function showPenalties(vehicleType) {
         }
       });
     }
-
-
 
     penaltyList.appendChild(li);
   });
