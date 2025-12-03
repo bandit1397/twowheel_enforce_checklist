@@ -215,9 +215,9 @@ const penalties = {
     { text: "➢ 안전모 미착용", depth: 1 },
     { text: '→ 범칙금(2만)<span style="font-size:0.70em;">(운전자)</span>', depth: 2 },
     { text: '→ 과태료(2만)<span style="font-size:0.70em;">(동승자 미착용→운전자에게 부과)</span>', depth: 2 },
-    { text: "➢ 승차정원 초과", depth: 1 },
-    { text: "→ 범칙금(4만)", depth: 2 },
-    { text: "→ 도로교통법 제50조 제10항, ", depth: 2 },
+    { text: "➢ 승차인원 초과", depth: 1 },
+    { text: "→ 범칙금(3만)", depth: 2 },
+    { text: "→ 도로교통법 제39조 제1항, ", depth: 2 },
     { text: '<span style="font-size:0.70em;">※ 전동킥보드 및 전동이륜평행차 정원: 1명</span>', depth: 2 },
     { text: '<span style="font-size:0.70em;">※ 전동기의 동력만으로 움직일 수 있는 자전거 정원: 2명</span>', depth: 2 },
   ],
@@ -239,7 +239,8 @@ const penalties = {
     { text: "➢ 안전모 미착용", depth: 1 },
     { text: "→ 처벌규정 없음", depth: 2 },
     { text: "➢ 승차인원 초과", depth: 1 },
-    { text: "→ 규정 없음", depth: 2 },
+    { text: "→ 범칙금(3만)", depth: 2 },
+    { text: "→ 도로교통법 제39조 제1항, ", depth: 2 },
   ],
   
   "자전거": [
@@ -258,16 +259,17 @@ const penalties = {
     { text: "➢ 안전모 미착용", depth: 1 },
     { text: "→ 처벌규정 없음", depth: 2 },
     { text: "➢ 승차인원 초과", depth: 1 },
-    { text: "→ 규정 없음", depth: 2 },
+    { text: "→ 범칙금(3만)", depth: 2 },
+    { text: "→ 도로교통법 제39조 제1항, ", depth: 2 },
   ]
 };
 
 const references = [
   { text: "➤ 폴리폰 범칙금/과태료 발부 요령", depth: 0 },
-  { text: "➢ 범칙금 발부", depth: 1 },
-  { text: "→ 외근단속발부>차량정보>차량구분", depth: 2 },
-  { text: "➢ 과태료 발부", depth: 1 },
-  { text: "→ 현장과태료>차량정보>차량구분", depth: 2 },
+  { text: "➢ PM 범칙금 발부 예", depth: 1 },
+  { text: "→ 외근단속발부>차량정보>차종구분<span style="font-size:0.70em;">(자전거등 그외)>조회구분(PM)>적용법조(승차인원)", depth: 2 },
+  { text: "➢ PM 과태료 발부 예", depth: 1 },
+  { text: "→ 현장과태료>차량정보>차종구분<span style="font-size:0.70em;">(자전거 등 그외)>조회구분(PM)>적용법조(동승자안전모미착용)", depth: 2 },
   
   { text: "➤ 기타", depth: 0 },
   { text: "➢ 기타 1", depth: 1 },
