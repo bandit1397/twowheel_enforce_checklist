@@ -394,7 +394,7 @@ function evaluate() {
     const brake = document.getElementById('brake').checked;
     const twowheels = document.getElementById('twowheels').checked;
     const ministerialordinance = document.getElementById('ministerialordinance').checked;
-    resultName = (powertrain && steeringsystem && brake && twowheels && ministerialordinance) ? "자전거" : "운동기구";
+    resultName = (powertrain && steeringsystem && brake && twowheels && ministerialordinance) ? "자전거" : '<span style="font-size:0.70em; color:red;">운동기구</span>';
   }
 
   if (drive === "motor" || drive === "hybrid") {
