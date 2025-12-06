@@ -69,15 +69,16 @@
 <div id="bikeBox" class="box" style="display:none;">
   <div class="section-title">② 자전거 요건</div>
   <label><input type="checkbox" id="bike_wheel"> 바퀴 2개 이상</label><br>
-  <label><input type="checkbox" id="bike_mech"> 페달·조향·제동장치 있음</label>
+  <label><input type="checkbox" id="bike_mech"> 구동+조향+제동장치 있음</label>
 </div>
 
 <!-- 전기자전거 조건 -->
 <div id="ebikeBox" class="box" style="display:none;">
-  <div class="section-title">② 전기자전거 3요건</div>
-  <label><input type="checkbox" id="ebike_sync"> 페달 + 전동기 동시 동력</label><br>
+  <div class="section-title">② 전기자전거 요건</div>
+  <label><input type="checkbox" id="bike_sync"> 자전거 요건 충족</label><br>
+  <label><input type="checkbox" id="ebike_sync"> 페달(손페달 포함) + 전동기 동시 동력</label><br>
   <label><input type="checkbox" id="ebike_limit"> 25km/h 이상시 전동기 미작동</label><br>
-  <label><input type="checkbox" id="ebike_weight"> 총중량 30kg 미만</label>
+  <label><input type="checkbox" id="ebike_weight"> 전체중량 30kg 미만</label>
 </div>
 
 <!-- PM 조건 -->
@@ -85,7 +86,7 @@
   <div class="section-title">② PM(개인형 이동장치) 요건</div>
   <label><input type="checkbox" id="pm_speed"> 25km/h 이상에서 전동기 작동 X</label><br>
   <label><input type="checkbox" id="pm_weight"> 차체 중량 30kg 미만</label><br>
-  <label><input type="checkbox" id="pm_cert"> 안전확인 신고된 제품</label>
+  <label><input type="checkbox" id="pm_cert"> 전동킥보드, 전동이륜평행차, 전동기의 동력만으로 움직일 수 있는 자전거로 안전확인 신고된 제품</label>
 </div>
 
 <button class="btn" onclick="checkResult()">판별하기</button>
