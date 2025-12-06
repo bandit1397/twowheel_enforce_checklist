@@ -84,9 +84,10 @@
 <!-- PM 조건 -->
 <div id="pmBox" class="box" style="display:none;">
   <div class="section-title">② PM(개인형 이동장치) 요건</div>
+  <label><input type="checkbox" id="pm_power"> 원동기장치자전거 요건(11kW 이하) 충족</label><br>
   <label><input type="checkbox" id="pm_speed"> 25km/h 이상에서 전동기 작동 X</label><br>
   <label><input type="checkbox" id="pm_weight"> 차체 중량 30kg 미만</label><br>
-  <label><input type="checkbox" id="pm_cert"> 전동킥보드, 전동이륜평행차, 전동기의 동력만으로 움직일 수 있는 자전거로 안전확인 신고된 제품</label>
+  <label><input type="checkbox" id="pm_cert"> 안전확인 신고된 PM(킥보드/평행차/전동자전거)</label>
 </div>
 
 <button class="btn" onclick="checkResult()">판별하기</button>
@@ -121,9 +122,9 @@ function checkResult() {
     return;
   }
 
-  // --------------------------
+  // ------------------------------------------
   // 1) 사람 힘만 → 자전거 or 운동기구
-  // --------------------------
+  // ------------------------------------------
   if (drive.value === "human") {
     const wheel = document.getElementById("bike_wheel").checked;
     const mech = document.getElementById("bike_mech").checked;
@@ -140,9 +141,9 @@ function checkResult() {
     return;
   }
 
-  // --------------------------
-  // 2) 동시 동력 → 전기자전거 판별
-  // --------------------------
+  // ------------------------------------------
+  // 2) 동시 동력 → 전기자전거 or 원동기장치자전거
+  // ------------------------------------------
   if (drive.value === "assist") {
     const s = document.getElementById("ebike_sync").checked;
     const l = document.getElementById("ebike_limit").checked;
@@ -160,15 +161,17 @@ function checkResult() {
     return;
   }
 
-  // --------------------------
-  // 3) 전동기만 → PM or 원동기장치자전거
-  // --------------------------
+  // ------------------------------------------
+  // 3) 전동기 동력만 → PM or 원동기장치자전거 (11kW 포함)
+  // ------------------------------------------
   if (drive.value === "motor") {
+    const power = document.getElementById("pm_power").checked;   // 11kW 이하
     const s = document.getElementById("pm_speed").checked;
     const w = document.getElementById("pm_weight").checked;
     const c = document.getElementById("pm_cert").checked;
 
-    if (s && w && c) {
+    // PM 요건 = (11kW 이하 AND 속도제한 AND 30kg↓ AND 안전확인 신고)
+    if (power && s && w && c) {
       result.className = "result-box pm";
       result.innerHTML = "개인형 이동장치(PM)";
     } else {
