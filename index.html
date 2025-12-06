@@ -48,7 +48,7 @@
   .bike { color: #111; }                 /* 자전거 */
   .ebike { color: #0055ff; }            /* 전기자전거 */
   .pm { color: #00a000; }               /* 개인형이동장치(PM) */
-  .moto { color: #d00000; }             /* 원동기장치자전거 */
+  .moto { color: #d00000; }             /* 원동기장치자전거, 이륜자동차 */
   .exercise { color: #0077ff; }         /* 운동기구 */
 </style>
 
@@ -84,10 +84,10 @@
 <!-- PM 조건 -->
 <div id="pmBox" class="box" style="display:none;">
   <div class="section-title">② PM(개인형 이동장치) 요건</div>
-  <label><input type="checkbox" id="pm_power"> 원동기장치자전거 요건(11kW 이하) 충족</label><br>
+  <label><input type="checkbox" id="pm_kw"> 최고정격출력 11kW 이하(원동기장치자전거 범위)</label><br>
   <label><input type="checkbox" id="pm_speed"> 25km/h 이상에서 전동기 작동 X</label><br>
   <label><input type="checkbox" id="pm_weight"> 차체 중량 30kg 미만</label><br>
-  <label><input type="checkbox" id="pm_cert"> 안전확인 신고된 PM(킥보드/평행차/전동자전거)</label>
+  <label><input type="checkbox" id="pm_cert"> 전동킥보드/전동이륜평행차/전동기 자전거로 안전확인 신고된 제품</label>
 </div>
 
 <button class="btn" onclick="checkResult()">판별하기</button>
@@ -95,23 +95,19 @@
 <div id="result" class="result-box" style="margin-top:20px; display:none;"></div>
 
 <script>
+// 구동 방식 선택 시 UI 표시 제어
 document.querySelectorAll('input[name="drive"]').forEach(r => {
   r.addEventListener('change', () => {
     document.getElementById("bikeBox").style.display = "none";
     document.getElementById("ebikeBox").style.display = "none";
     document.getElementById("pmBox").style.display = "none";
 
-    if (r.value === "human") {
-      document.getElementById("bikeBox").style.display = "block";
-    }
-    if (r.value === "assist") {
-      document.getElementById("ebikeBox").style.display = "block";
-    }
-    if (r.value === "motor") {
-      document.getElementById("pmBox").style.display = "block";
-    }
+    if (r.value === "human") document.getElementById("bikeBox").style.display = "block";
+    if (r.value === "assist") document.getElementById("ebikeBox").style.display = "block";
+    if (r.value === "motor") document.getElementById("pmBox").style.display = "block";
   });
 });
+
 
 function checkResult() {
   const drive = document.querySelector('input[name="drive"]:checked');
@@ -122,9 +118,9 @@ function checkResult() {
     return;
   }
 
-  // ------------------------------------------
+  // --------------------------
   // 1) 사람 힘만 → 자전거 or 운동기구
-  // ------------------------------------------
+  // --------------------------
   if (drive.value === "human") {
     const wheel = document.getElementById("bike_wheel").checked;
     const mech = document.getElementById("bike_mech").checked;
@@ -141,9 +137,9 @@ function checkResult() {
     return;
   }
 
-  // ------------------------------------------
-  // 2) 동시 동력 → 전기자전거 or 원동기장치자전거
-  // ------------------------------------------
+  // --------------------------
+  // 2) 사람+전동기 동시 동력 → 전기자전거 or 원동기장치자전거
+  // --------------------------
   if (drive.value === "assist") {
     const s = document.getElementById("ebike_sync").checked;
     const l = document.getElementById("ebike_limit").checked;
@@ -161,24 +157,34 @@ function checkResult() {
     return;
   }
 
-  // ------------------------------------------
-  // 3) 전동기 동력만 → PM or 원동기장치자전거 (11kW 포함)
-  // ------------------------------------------
+  // --------------------------
+  // 3) 전동기만 → PM, 원동기장치자전거, 이륜자동차
+  // --------------------------
   if (drive.value === "motor") {
-    const power = document.getElementById("pm_power").checked;   // 11kW 이하
+    const kw = document.getElementById("pm_kw").checked;      // 11kW 이하 여부
     const s = document.getElementById("pm_speed").checked;
     const w = document.getElementById("pm_weight").checked;
     const c = document.getElementById("pm_cert").checked;
 
-    // PM 요건 = (11kW 이하 AND 속도제한 AND 30kg↓ AND 안전확인 신고)
-    if (power && s && w && c) {
-      result.className = "result-box pm";
-      result.innerHTML = "개인형 이동장치(PM)";
-    } else {
+    // ① 11kW 초과 → 이륜자동차
+    if (!kw) {
       result.className = "result-box moto";
-      result.innerHTML = "원동기장치자전거";
+      result.innerHTML = "이륜자동차";
+      result.style.display = "block";
+      return;
     }
 
+    // ② 11kW 이하 + PM 요건 모두 충족 → PM
+    if (s && w && c) {
+      result.className = "result-box pm";
+      result.innerHTML = "개인형 이동장치(PM)";
+      result.style.display = "block";
+      return;
+    }
+
+    // ③ 11kW 이하 + PM 요건 불충족 → 원동기장치자전거
+    result.className = "result-box moto";
+    result.innerHTML = "원동기장치자전거";
     result.style.display = "block";
     return;
   }
