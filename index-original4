@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>단속용 간편 판별기</title>
+<title>단속용 간편 판별기 (Penalties 통합)</title>
 
 <style>
   body {
@@ -50,12 +50,31 @@
   .pm { color: #00a000; }               /* 개인형이동장치(PM) */
   .moto { color: #d00000; }             /* 원동기장치자전거, 이륜자동차 */
   .exercise { color: #0077ff; }         /* 운동기구 */
+
+  /* penalties list */
+  #penalty-section { display: none; margin-top: 10px; }
+  #penalty-list { margin: 0; padding-left: 0; list-style: none; }
+  #penalty-list li { padding: 6px 8px; }
+  #penalty-list li.depth0 { font-weight: 800; cursor: pointer; background: #fafafa; border-radius: 6px; }
+  #penalty-list li.depth1 { display: none; margin-left: 12px; color: #2a4d91; }
+  #penalty-list li.depth2 { display: none; margin-left: 24px; color: #555; font-weight: 400; font-size: 0.95em; }
+
+  /* references */
+  #reference-section { display: none; margin-top: 10px; }
+  #reference-list { margin: 0; padding-left: 0; list-style: none; }
+  #reference-list li { padding: 6px 8px; }
+  #reference-list li.depth0 { font-weight: 800; cursor: pointer; background:#fafafa; border-radius:6px;}
+  #reference-list li.depth1 { display: none; margin-left:12px; color:#333;}
+  #reference-list li.depth2 { display: none; margin-left:24px; color:#555; font-size:0.95em;}
+
+  /* small helper */
+  .muted { font-size:0.9em; color:#666; margin-top:6px; }
 </style>
 
 </head>
 <body>
 
-<h2>단속 현장 간편 판별기</h2>
+<h2>PM 등 이륜 단속 메뉴얼</h2>
 
 <!-- 1차 구동 방식 -->
 <div class="box">
@@ -84,23 +103,258 @@
 <!-- PM 조건 -->
 <div id="pmBox" class="box" style="display:none;">
   <div class="section-title">② PM(개인형 이동장치) 요건</div>
-  <label><input type="checkbox" id="pm_kw"> 최고정격출력 11kW 이하(원동기장치자전거 범위)</label><br>
+  <p class="muted">※ PM은 원동기장치자전거 범위(전동기 최고정격출력 11kW 이하) 중에서 아래 요건을 모두 충족해야 합니다.</p>
+  <label><input type="checkbox" id="pm_kw"> 최고정격출력 11kW 이하 (원동기장치자전거 요건)</label><br>
   <label><input type="checkbox" id="pm_speed"> 25km/h 이상에서 전동기 작동 X</label><br>
   <label><input type="checkbox" id="pm_weight"> 차체 중량 30kg 미만</label><br>
   <label><input type="checkbox" id="pm_cert"> 전동킥보드/전동이륜평행차/전동기 자전거로 안전확인 신고된 제품</label>
 </div>
 
-<button class="btn" onclick="checkResult()">판별하기</button>
+<button class="btn" onclick="checkResult()">클릭하여 차종 확인</button>
 
 <div id="result" class="result-box" style="margin-top:20px; display:none;"></div>
 
+<!-- penalties 출력 섹션 -->
+<div id="penalty-section" class="box" style="display:none;">
+  <div class="section-title">위반 및 처벌</div>
+  <ul id="penalty-list"></ul>
+</div>
+
+<!-- 참고사항 토글 -->
+<button id="toggle-reference" class="btn" style="background:#2a4d91; margin-top:8px;">참고사항</button>
+<div id="reference-section" class="box" style="display:none;">
+ 
+  <ul id="reference-list"></ul>
+</div>
+
 <script>
-// 구동 방식 선택 시 UI 표시 제어
+// penalties 정의 (사용자가 올려주신 그대로)
+const penalties = {
+  "이륜자동차": [
+    { text: "➤ 무면허위반", depth: 0 },
+    { text: "→ 1년 ↓ 또는 300만원 ↓", depth: 2 },
+    
+    { text: '➤ 음주운전<span style="font-size:0.70em; color:red;">(도로가 아닌 경우도 적용)</span>', depth: 0 },
+    { text: '→ 1년 ↓ 또는 500만원 ↓ 등', depth: 2 },
+    
+    { text: "➤ 통행구분위반", depth: 0 },
+    { text: "➢ 중앙선 침범외 보도운행 등", depth: 1 },
+    { text: "→ 범칙금(4만)", depth: 2 },
+     
+    { text: "➤ 운전자준수사항위반 등", depth: 0 },
+    { text: "➢ 안전모 미착용", depth: 1 },
+    { text: '→ 범칙금(2만)<span style="font-size:0.70em;">(운전자)</span>', depth: 2 },
+    { text: '→ 과태료(2만)<span style="font-size:0.70em;">(동승자 미착용→운전자에게 부과)</span>', depth: 2 },
+    { text: "➢ 승차인원 초과", depth: 1 },
+    { text: "→ 범칙금(4만)", depth: 2 },
+  ],
+
+  
+  "원동기장치자전거": [
+    { text: "➤ 무면허위반", depth: 0 },
+    { text: `→ 벌금 30만원<span style="font-size:0.70em;">(경미범죄 현행범인체포 <span style="color:red; font-weight:bold;">X</span>)</span>`, depth: 2 },
+
+    
+    { text: '➤ 음주운전<span style="font-size:0.70em; color:red;">(도로가 아닌 경우도 적용)</span>', depth: 0 },
+    { text: '→ 1년 ↓ 또는 500만원 ↓ 등', depth: 2 },
+    
+    { text: "➤ 통행구분위반", depth: 0 },
+    { text: "➢ 중앙선 침범외 보도운행 등", depth: 1 },
+    { text: "→ 범칙금(4만)", depth: 2 },
+    
+    { text: "➤ 운전자준수사항위반 등", depth: 0 },
+    { text: "➢ 안전모 미착용", depth: 1 },
+    { text: '→ 범칙금(2만)<span style="font-size:0.70em;">(운전자)</span>', depth: 2 },
+    { text: '→ 과태료(2만)<span style="font-size:0.70em;">(동승자 미착용→운전자에게 부과)</span>', depth: 2 },
+    { text: "➢ 승차인원 초과", depth: 1 },
+    { text: "→ 범칙금(4만)", depth: 2 },
+  ],
+
+
+  "개인형이동장치": [
+    { text: "➤ 무면허위반", depth: 0 },
+    { text: "➢ 14세 이상", depth: 1 },
+    { text: "→ 범칙금(10만)", depth: 2 },
+    { text: "➢ 13세 미만(어린이)", depth: 1 },
+    { text: "→ (보호자에게)과태료", depth: 2 },
+    { text: '<span style="font-size:0.70em;">※ 어린이의 PM 운행사실 인지 필요</span>', depth: 2 },
+    { text: '<span style="font-size:0.70em;">※ 13세의 경우: 법의 사각지대</span>', depth: 2 },
+     
+    { text: '➤ 음주운전<span style="font-size:0.70em; color:red;">(도로가 아닌 경우도 적용)</span>', depth: 0 },
+    { text: "➢ 음주운전", depth: 1 },
+    { text: "→ 범칙금(10만)", depth: 2 },
+   
+    { text: "➤ 통행구분위반", depth: 0 },
+    { text: "➢ 중앙선 침범외 보도운행 등", depth: 1 },
+    { text: "➢ 자전거도로 우선 운행 의무", depth: 1 },
+    { text: "→ 범칙금(3만)", depth: 2 },
+
+    { text: "➤ 운전자준수사항위반 등", depth: 0 },
+    { text: "➢ 안전모 미착용", depth: 1 },
+    { text: '→ 범칙금(2만)<span style="font-size:0.70em;">(운전자)</span>', depth: 2 },
+    { text: '→ 과태료(2만)<span style="font-size:0.70em;">(동승자 미착용→운전자에게 부과)</span>', depth: 2 },
+    { text: "➢ 승차인원 초과", depth: 1 },
+    { text: "→ 범칙금(3만)", depth: 2 },
+    { text: "→ 도로교통법 제39조 제1항, ", depth: 2 },
+    { text: '<span style="font-size:0.70em;">※ 전동킥보드 및 전동이륜평행차 정원: 1명</span>', depth: 2 },
+    { text: '<span style="font-size:0.70em;">※ 전동기의 동력만으로 움직일 수 있는 자전거 정원: 2명</span>', depth: 2 },
+  ],
+  
+  "전기자전거(도로교통법상 자전거)": [
+    { text: "➤ 무면허위반", depth: 0 },
+    { text: "➢ 무면허 규정 없음", depth: 1 },
+    { text: "→ 모든 연령 가능", depth: 2 },
+    
+    { text: '➤ 음주운전<span style="font-size:0.70em; color:red;">(도로가 아닌 경우도 적용)</span>', depth: 0 },
+    { text: "→ 범칙금(3만)", depth: 2 },
+    
+    { text: "➤ 통행구분위반", depth: 0 },
+    { text: "➢ 중앙선 침범외 보도운행 등", depth: 1 },
+    { text: "➢ 자전거도로 우선 운행 의무", depth: 1 },
+    { text: "→ 범칙금(3만)", depth: 2 },
+    
+    { text: "➤ 운전자준수사항위반 등", depth: 0 },
+    { text: "➢ 안전모 미착용", depth: 1 },
+    { text: "→ 처벌규정 없음", depth: 2 },
+    { text: "➢ 승차인원 초과", depth: 1 },
+    { text: "→ 범칙금(3만)", depth: 2 },
+    { text: "→ 도로교통법 제39조 제1항, ", depth: 2 },
+  ],
+  
+  "자전거": [
+    { text: "➤ 무면허위반", depth: 0 },
+    { text: "→ 무면허 규정 없음", depth: 2 },
+      
+    { text: '➤ 음주운전<span style="font-size:0.70em; color:red;">(도로가 아닌 경우도 적용)</span>', depth: 0 },
+    { text: "→ 범칙금(3만)", depth: 2 },
+    
+    { text: "➤ 통행구분위반", depth: 0 },
+    { text: "➢ 중앙선 침범외 보도운행 등", depth: 1 },
+    { text: "➢ 자전거도로 우선 운행 의무", depth: 1 },
+    { text: "→ 범칙금(3만)", depth: 2 },
+ 
+    { text: "➤ 운전자준수사항위반 등", depth: 0 },
+    { text: "➢ 안전모 미착용", depth: 1 },
+    { text: "→ 처벌규정 없음", depth: 2 },
+    { text: "➢ 승차인원 초과", depth: 1 },
+    { text: "→ 범칙금(3만)", depth: 2 },
+    { text: "→ 도로교통법 제39조 제1항, ", depth: 2 },
+  ]
+};
+
+const references = [
+  { text: "➤ 폴리폰 범칙금/과태료 발부 요령", depth: 0 },
+  { text: "➢ PM 범칙금 발부 예", depth: 1 },
+  { text: '→ 외근단속발부>차량정보>차종구분<span style="font-size:0.70em;">(자전거등 그외)</span>>조회구분<span style="font-size:0.70em;">(PM)</span> >적용법조<span style="font-size:0.70em;">(승차인원)</span>', depth: 2 },
+  { text: "➢ PM 과태료 발부 예", depth: 1 },
+  { text: '→ 현장과태료>차량정보>차종구분<span style="font-size:0.70em;">(자전거 등 그외)</span>>조회구분<span style="font-size:0.70em;">(PM)</span> >적용법조<span style="font-size:0.70em;">(동승자안전모미착용)</span>', depth: 2 },
+  
+  { text: "➤ 단속현장 도로 지목 확인", depth: 0 },
+  { text: "➢ <a href='https://www.eum.go.kr'>토지이음의 토지이용계획</a> 활용 위반장소(도로 여부)확인 가능", depth: 1 },
+  { text: "→ 토지이음>토지이용계획>지번 입력>열람 ", depth: 2 },
+  
+];
+
+// 참고사항 렌더링
+function renderReferences() {
+  const ul = document.getElementById("reference-list");
+  ul.innerHTML = "";
+
+  references.forEach((item, idx, arr) => {
+    const li = document.createElement("li");
+    li.innerHTML = item.text;
+    li.className = "depth" + item.depth;
+
+    if (item.depth === 0) {
+      li.style.fontWeight = "bold";
+      li.style.cursor = "pointer";
+
+      li.addEventListener("click", () => {
+        let i = idx + 1;
+        let hasHidden = false;
+
+        // 하위(depth>0) 중 하나라도 숨겨져 있으면 펼치기
+        while (i < arr.length && arr[i].depth > 0) {
+          const el = ul.children[i];
+          if (el.style.display === "none" || el.style.display === "") {
+            hasHidden = true;
+            break;
+          }
+          i++;
+        }
+
+        // 토글 실행
+        i = idx + 1;
+        while (i < arr.length && arr[i].depth > 0) {
+          const el = ul.children[i];
+          el.style.display = hasHidden ? "list-item" : "none";
+          i++;
+        }
+      });
+    }
+
+    ul.appendChild(li);
+  });
+}
+
+// penalties 렌더링
+function showPenalties(resultKey) {
+  const penaltySection = document.getElementById('penalty-section');
+  const penaltyList = document.getElementById('penalty-list');
+  penaltyList.innerHTML = "";
+
+  // 매핑: 결과 텍스트 -> penalties 키
+  // "개인형 이동장치(PM)" -> "개인형이동장치"
+  // "전기자전거" -> "전기자전거(도로교통법상 자전거)"
+  let key = resultKey;
+  if (resultKey && resultKey.startsWith("개인형")) key = "개인형이동장치";
+  if (resultKey === "전기자전거") key = "전기자전거(도로교통법상 자전거)";
+
+  if (!penalties[key]) {
+    penaltySection.style.display = 'none';
+    return;
+  }
+
+  penaltySection.style.display = 'block';
+
+  penalties[key].forEach((item, idx, arr) => {
+    const li = document.createElement('li');
+    li.innerHTML = item.text;
+    li.className = "depth" + item.depth;
+
+    if(item.depth === 0) {
+      li.addEventListener('click', () => {
+        let i = idx + 1;
+        let hasHidden = false;
+        while(i < arr.length && arr[i].depth > 0) {
+          const el = penaltyList.children[i];
+          if(el.style.display === 'none' || el.style.display === '') {
+            hasHidden = true;
+            break;
+          }
+          i++;
+        }
+
+        i = idx + 1;
+        while(i < arr.length && arr[i].depth > 0) {
+          const el = penaltyList.children[i];
+          el.style.display = hasHidden ? 'list-item' : 'none';
+          i++;
+        }
+      });
+    }
+
+    penaltyList.appendChild(li);
+  });
+}
+
+// UI 표시 제어 (기존 판별기)
 document.querySelectorAll('input[name="drive"]').forEach(r => {
   r.addEventListener('change', () => {
     document.getElementById("bikeBox").style.display = "none";
     document.getElementById("ebikeBox").style.display = "none";
     document.getElementById("pmBox").style.display = "none";
+    document.getElementById("penalty-section").style.display = "none";
 
     if (r.value === "human") document.getElementById("bikeBox").style.display = "block";
     if (r.value === "assist") document.getElementById("ebikeBox").style.display = "block";
@@ -108,7 +362,7 @@ document.querySelectorAll('input[name="drive"]').forEach(r => {
   });
 });
 
-
+// 판별 로직 (기존)
 function checkResult() {
   const drive = document.querySelector('input[name="drive"]:checked');
   const result = document.getElementById("result");
@@ -118,9 +372,7 @@ function checkResult() {
     return;
   }
 
-  // --------------------------
-  // 1) 사람 힘만 → 자전거 or 운동기구
-  // --------------------------
+  // 사람 힘만 -> 자전거 or 운동기구
   if (drive.value === "human") {
     const wheel = document.getElementById("bike_wheel").checked;
     const mech = document.getElementById("bike_mech").checked;
@@ -134,12 +386,12 @@ function checkResult() {
     }
 
     result.style.display = "block";
+    // penalties (자전거에는 penalties[key]가 있음)
+    showPenalties(result.innerText || result.textContent);
     return;
   }
 
-  // --------------------------
-  // 2) 사람+전동기 동시 동력 → 전기자전거 or 원동기장치자전거
-  // --------------------------
+  // 동시 동력 -> 전기자전거 or 원동기장치자전거
   if (drive.value === "assist") {
     const s = document.getElementById("ebike_sync").checked;
     const l = document.getElementById("ebike_limit").checked;
@@ -154,12 +406,11 @@ function checkResult() {
     }
 
     result.style.display = "block";
+    showPenalties(result.innerText || result.textContent);
     return;
   }
 
-  // --------------------------
-  // 3) 전동기만 → PM, 원동기장치자전거, 이륜자동차
-  // --------------------------
+  // 전동기만 -> PM, 원동기장치자전거, 이륜자동차
   if (drive.value === "motor") {
     const kw = document.getElementById("pm_kw").checked;      // 11kW 이하 여부
     const s = document.getElementById("pm_speed").checked;
@@ -171,6 +422,7 @@ function checkResult() {
       result.className = "result-box moto";
       result.innerHTML = "이륜자동차";
       result.style.display = "block";
+      showPenalties(result.innerText || result.textContent);
       return;
     }
 
@@ -179,6 +431,7 @@ function checkResult() {
       result.className = "result-box pm";
       result.innerHTML = "개인형 이동장치(PM)";
       result.style.display = "block";
+      showPenalties(result.innerText || result.textContent);
       return;
     }
 
@@ -186,9 +439,19 @@ function checkResult() {
     result.className = "result-box moto";
     result.innerHTML = "원동기장치자전거";
     result.style.display = "block";
+    showPenalties(result.innerText || result.textContent);
     return;
   }
 }
+
+// 참고사항 토글
+document.getElementById("toggle-reference").addEventListener("click", () => {
+  const ref = document.getElementById("reference-section");
+  ref.style.display = (ref.style.display === "block") ? "none" : "block";
+});
+
+// 초기 렌더링
+renderReferences();
 </script>
 
 </body>
