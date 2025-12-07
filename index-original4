@@ -110,7 +110,7 @@
   <label><input type="checkbox" id="pm_cert"> 전동킥보드/전동이륜평행차/전동기 자전거로 안전확인 신고된 제품</label>
 </div>
 
-<button class="btn" onclick="checkResult()">클릭하여 차종 확인</button>
+<button id="toggle-check" class="btn" onclick="toggleCheck()">클릭하여 차종 확인</button>
 
 <div id="result" class="result-box" style="margin-top:20px; display:none;"></div>
 
@@ -443,6 +443,31 @@ function checkResult() {
     return;
   }
 }
+
+ 
+let resultVisible = false;   // 토글 상태 저장
+
+function toggleCheck() {
+  const resultBox = document.getElementById("result");
+  const penaltySection = document.getElementById("penalty-section");
+
+  if (!resultVisible) {
+    // 첫 클릭 → 판별 실행
+    checkResult();
+    resultBox.style.display = "block";
+    penaltySection.style.display = "block";
+    resultVisible = true;
+  } 
+  else {
+    // 다시 클릭 → 숨기기
+    resultBox.style.display = "none";
+    penaltySection.style.display = "none";
+    resultVisible = false;
+  }
+}
+ 
+
+
 
 // 참고사항 토글
 document.getElementById("toggle-reference").addEventListener("click", () => {
