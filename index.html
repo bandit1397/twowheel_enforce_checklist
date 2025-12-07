@@ -444,6 +444,31 @@ function checkResult() {
   }
 }
 
+ 
+let resultVisible = false;   // 토글 상태 저장
+
+function toggleCheck() {
+  const resultBox = document.getElementById("result");
+  const penaltySection = document.getElementById("penalty-section");
+
+  if (!resultVisible) {
+    // 첫 클릭 → 판별 실행
+    checkResult();
+    resultBox.style.display = "block";
+    penaltySection.style.display = "block";
+    resultVisible = true;
+  } 
+  else {
+    // 다시 클릭 → 숨기기
+    resultBox.style.display = "none";
+    penaltySection.style.display = "none";
+    resultVisible = false;
+  }
+}
+ 
+
+
+
 // 참고사항 토글
 document.getElementById("toggle-reference").addEventListener("click", () => {
   const ref = document.getElementById("reference-section");
