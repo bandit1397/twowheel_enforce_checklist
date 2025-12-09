@@ -106,10 +106,17 @@
 <div id="pmBox" class="box" style="display:none;">
   <div class="section-title">② PM or 원동기 or 이륜</div>
   <p class="muted" style="font-size:12px; margin-left:2em; color:green;">충족항목 모두 체크 → 차종확인 클릭</p>
-  <label><input type="checkbox" id="pm_kw"> 최고정격출력 11kW 이하 (원동기장치자전거 요건)</label><br>
+  <label><input type="checkbox" id="pm_kw"> 정격출력 ≤11kW</label><br>
   <label><input type="checkbox" id="pm_speed"> 25km/h 이상에서 전동기 작동 X</label><br>
   <label><input type="checkbox" id="pm_weight"> 차체 중량 30kg 미만</label><br>
-  <label><input type="checkbox" id="pm_cert"> 전동킥보드/전동이륜평행차/전동기 자전거로 안전확인 신고된 제품</label>
+  <label><input type="checkbox" id="pm_cert"> 행정안전부령으로 정하는 것</label>
+  <label>
+  <input type="checkbox" id="pm_cert"> 
+  행정안전부령으로 정하는 것 (
+  <a href="https://www.law.go.kr/lsLinkCommonInfo.do?lspttninfSeq=162835" target="_blank">
+    도로교통법 시행규칙 제2조의3
+  </a>)
+</label>
 </div>
 
 <button id="toggle-check" class="btn" onclick="toggleCheck()">클릭하여 차종 확인</button>
