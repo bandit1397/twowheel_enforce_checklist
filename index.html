@@ -109,19 +109,11 @@
   <label><input type="checkbox" id="pm_kw"> 정격출력 ≤11kW</label><br>
   <label><input type="checkbox" id="pm_speed"> 25km/h 이상에서 전동기 작동 X</label><br>
   <label><input type="checkbox" id="pm_weight"> 차체 중량 30kg 미만</label><br>
-  <label>
-  <input type="checkbox" id="pm_cert"> 
-  행정안전부령으로 정하는 것 (
-  <a href="https://www.law.go.kr/lsLinkCommonInfo.do?lspttninfSeq=162835" target="_blank">
-    도로교통법 시행규칙 제2조의3
-  </a>)
-</label><br>
-  <label>
-  <input type="checkbox" id="pm_cert"> 
-  <a href="https://www.law.go.kr/lsLinkCommonInfo.do?lspttninfSeq=162835" target="_blank" style="text-decoration:none; color:inherit;">
-    행정안전부령으로 정하는 것
-  </a>
-</label>
+  <label><input type="checkbox" id="pm_cert"> 행정안전부령으로 정하는 것</label><br>
+  <p class="muted" style="font-size:12px; margin-left:2em; color:green; cursor:pointer;"
+   onclick="window.open('https://www.law.go.kr/lsLinkCommonInfo.do?lspttninfSeq=162835', '_blank')">
+  도로교통법 시행규칙 제2조의3
+  </p>
 </div>
 
 <button id="toggle-check" class="btn" onclick="toggleCheck()">클릭하여 차종 확인</button>
