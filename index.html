@@ -58,6 +58,10 @@
   #penalty-list li.depth0 { font-weight: 800; cursor: pointer; background: #fafafa; border-radius: 6px; }
   #penalty-list li.depth1 { display: none; margin-left: 12px; color: #2a4d91; }
   #penalty-list li.depth2 { display: none; margin-left: 24px; color: #555; font-weight: 400; font-size: 0.95em; }
+  /* 내어쓰기: 기호 칸 + 본문 칸 (줄바꿈 시 본문 첫 글자에 정렬) */
+  #penalty-list .row { display:flex; gap:0.35em; }
+  #penalty-list .mk  { flex:0 0 auto; }
+  #penalty-list .tx  { flex:1 1 auto; min-width:0; }
 
   /* references */
   #reference-section { display: none; margin-top: 10px; }
@@ -360,7 +364,10 @@ function showPenalties(resultKey) {
 
   penalties[key].forEach((item, idx, arr) => {
     const li = document.createElement('li');
-    li.innerHTML = item.text;
+    const m = item.text.match(/^(➤|➢|→|※|\d+(?:-\d+)?\.?)\s*([\s\S]*)$/);
+    li.innerHTML = m
+      ? `<div class="row"><span class="mk">${m[1]}</span><span class="tx">${m[2]}</span></div>`
+      : item.text;
     li.className = "depth" + item.depth;
 
     if(item.depth === 0) {
