@@ -66,6 +66,13 @@
   #reference-list li.depth0 { font-weight: 800; cursor: pointer; background:#fafafa; border-radius:6px;}
   #reference-list li.depth1 { display: none; margin-left:12px; color:#333;}
   #reference-list li.depth2 { display: none; margin-left:24px; color:#555; font-size:0.95em;}
+  #reference-list li.depth3 { display: none; margin-left:36px; color:#555; font-size:0.95em;}
+  /* 내어쓰기: 기호 칸 + 본문 칸 (줄바꿈 시 본문 첫 글자에 정렬) */
+  #reference-list .row { display:flex; gap:0.35em; }
+  #reference-list .mk  { flex:0 0 auto; }
+  #reference-list .tx  { flex:1 1 auto; min-width:0; }
+  /* ( ) 안 글자: 2포인트 작게 */
+  #reference-list .paren { font-size: calc(1em - 2pt); }
 
   /* small helper */
   .muted { font-size:0.9em; color:#666; margin-top:6px; }
@@ -251,16 +258,33 @@ const penalties = {
 };
 
 const references = [
-  { text: "➤ 폴리폰 범칙금/과태료 발부 요령", depth: 0 },
-  { text: "➢ PM 범칙금 발부 예", depth: 1 },
-  { text: '→ 외근단속발부>차량정보>차종구분<span style="font-size:0.70em;">(자전거등 그외)</span>>조회구분<span style="font-size:0.70em;">(PM)</span> >적용법조<span style="font-size:0.70em;">(제50조10항/4만원-개인형 이동장치 승차정원 위반)</span>', depth: 2 },
-  { text: "➢ PM 과태료 발부 예", depth: 1 },
-  { text: '→ 현장과태료>차량정보>차종구분<span style="font-size:0.70em;">(자전거 등 그외)</span>>조회구분<span style="font-size:0.70em;">(PM)</span> >적용법조<span style="font-size:0.70em;">(제50조4항/2만원-개인형이동장치 동승자안전모 미착용)</span>', depth: 2 },
+  { text: '➤ 폴리폰 범칙금/과태료/결격등록', depth: 0 },
+  { text: '➢ PM 범칙금 발부 예', depth: 1 },
+  { text: '→ 외근단속발부>차량정보>차종구분<span class="paren">(자전거등 그 외)</span>>조회구분<span class="paren">(PM)</span>>적용법조<span class="paren">(제50조10항/4만원-개인형 이동장치 승차정원 위반)</span>', depth: 2 },
+  { text: '➢ PM 과태료 발부 예', depth: 1 },
+  { text: '→ 현장과태료>차량정보>차종구분<span class="paren">(자전거 등 그 외)</span>>조회구분<span class="paren">(PM)</span>>적용법조<span class="paren">(제50조4항/2만원-개인형이동장치 동승자안전모 미착용)</span>', depth: 2 },
+  { text: '➢ PM 무면허 결격 등록', depth: 1 },
+  { text: '1-1 무면허 통고서 입력 후 ‘알림’<span class="paren">(개인형이동장치 무면허 결격으로 정지/무면허등록 화면으로 이동합니다. 진행하시겠습니까)</span>>확인', depth: 2 },
+  { text: '1-2 <span class="paren">(1-1 알림이 현출되지 않을 경우)</span>정지/무면허 등록 선택', depth: 2 },
+  { text: '2. <span class="paren">(정지/무면허등록)</span>운전자<span class="paren">(입력)</span>', depth: 2 },
+  { text: '3. <span class="paren">(확인-종별 무면허 처리하시겠습니까)</span>확인', depth: 2 },
+  { text: '4. 정지/무면허 선택', depth: 2 },
+  { text: '5. <span class="paren">(통고서 등록 완료)</span> 확인', depth: 2 },
+  { text: '➢ PM 음주 + 무면허', depth: 1 },
+  { text: '1. 범칙금 발부', depth: 2 },
+  { text: '→ 외근단속발부>차량정보>차량구분<span class="paren">(자전거등 그 외)</span>>조회구분<span class="paren">(PM)</span>>확인>적용법조<span class="paren">(제44조제1항/자전거등 음주운전)</span>', depth: 3 },
+  { text: '2. 음주 단속 발부<span class="paren">(주취자 적발보고서)</span>', depth: 2 },
+  { text: '3. 정지/무면허 결격등록', depth: 2 },
+  { text: '4. 서류작성', depth: 2 },
+  { text: '→ 단속경위서', depth: 3 },
+  { text: '→ 주취운전자 정황진술보고서<span class="paren">(PDA 입력 가능)</span>', depth: 3 },
+  { text: '→ 주취운전자 정황보고', depth: 3 },
+  { text: '5. 주무부서 인계', depth: 2 },
   
   { text: "➤ 단속현장 도로 여부 확인", depth: 0 },
   { text: "➢ <a href='https://www.eum.go.kr'>토지이음의 토지이용계획</a> 활용 현장 지목 확인 가능", depth: 1 },
   { text: "→ 토지이용계획><span style='color:green;'>지번</span> 입력>열람 ", depth: 2 },
-  { text: "<span style='font-size:0.70em; display:block; margin-left:3em;'>※ 네이버지도>위치(우클릭)>이 위치의 주소는?(클릭)><span style='color:green;'>지번</span> 추출</span>", depth: 3 },
+  { text: "<span style='font-size:0.70em;'>※ 네이버지도>위치(우클릭)>이 위치의 주소는?(클릭)><span style='color:green;'>지번</span> 추출</span>", depth: 3 },
    
   
 ];
@@ -272,7 +296,10 @@ function renderReferences() {
 
   references.forEach((item, idx, arr) => {
     const li = document.createElement("li");
-    li.innerHTML = item.text;
+    const m = item.text.match(/^(➤|➢|→|※|\d+(?:-\d+)?\.?)\s*([\s\S]*)$/);
+    li.innerHTML = m
+      ? `<div class="row"><span class="mk">${m[1]}</span><span class="tx">${m[2]}</span></div>`
+      : item.text;
     li.className = "depth" + item.depth;
 
     if (item.depth === 0) {
